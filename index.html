@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Asahi Linux Setup</title>
+    <link rel="icon" href="assets/asahi-logomark.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+    <script type="module" src="src/app.js"></script>
+  </head>
+  <body>
+    <main
+      id="installer"
+      data-screen="welcome"
+      class="installer"
+      aria-labelledby="screen-title"
+      hidden
+    >
+      <header class="titlebar">
+        <span class="titlebar-brand">
+          <img data-asset="mark" alt="" />
+          <span data-i18n="app.title"></span>
+        </span>
+        <button
+          class="window-close"
+          data-action="close"
+          data-label="close.label"
+        >
+          <span aria-hidden="true">x</span>
+        </button>
+      </header>
+      <div id="screen">
+        <div class="split-body">
+          <aside class="brand-panel"><img data-asset="logo" alt="" /></aside>
+          <section class="welcome-main">
+            <h1 id="screen-title" tabindex="-1" data-i18n="welcome.title"></h1>
+            <div class="welcome-copy">
+              <p data-i18n="welcome.lead"></p>
+              <p data-i18n="welcome.body"></p>
+            </div>
+            <div class="device-info">
+              <p data-value="device"></p>
+              <button
+                class="text-button"
+                data-action="device"
+                data-i18n="device.details"
+              ></button>
+              <div class="version">
+                <span data-i18n="version"></span>
+                <button
+                  class="text-button"
+                  data-action="credits"
+                  data-i18n="credits"
+                ></button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+      <footer class="window-footer">
+        <button
+          class="button quiet"
+          data-action="close"
+          data-i18n="cancel"
+        ></button>
+        <div class="footer-actions">
+          <button
+            class="button primary"
+            data-action="next"
+            data-i18n="next"
+          ></button>
+        </div>
+      </footer>
+    </main>
+    <p id="startup-error" class="startup-error" role="alert" hidden></p>
+    <noscript>This installer needs JavaScript enabled.</noscript>
+    <dialog id="dialog" aria-labelledby="dialog-title">
+      <div class="dialog-body">
+        <h2 id="dialog-title"></h2>
+        <div id="dialog-content"></div>
+      </div>
+      <form method="dialog">
+        <button class="button primary" data-i18n="close" autofocus></button>
+      </form>
+    </dialog>
+  </body>
+</html>

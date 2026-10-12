@@ -1,0 +1,388 @@
+:root {
+  color-scheme: light;
+  --accent: #a33d58;
+  --accent-hover: #842b43;
+  --accent-soft: #f6edf0;
+  --accent-text: #78334b;
+  --text: #25262b;
+  --muted: #64636c;
+  --line: #e7e5e9;
+  --surface: #fdfdfe;
+  --background: #eeedf3;
+  --panel: #303238;
+  --footer: #f9f8fb;
+  --welcome-footer: #eeedf2;
+  --field: #ffffff;
+  --hover: #f5f2f6;
+  --font:
+    'Segoe UI Variable', 'Segoe UI', -apple-system, BlinkMacSystemFont, Arial,
+    sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+body {
+  margin: 0;
+  padding: 24px;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: var(--background);
+  color: var(--text);
+  font: 15px/1.5 var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+button:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+h1:focus {
+  outline: none;
+}
+
+h1,
+h2,
+p {
+  overflow-wrap: anywhere;
+}
+
+.installer {
+  width: min(980px, 100%);
+  border: 1px solid var(--field);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow:
+    0 18px 60px #382d4521,
+    0 2px 8px #3026370d;
+  overflow: hidden;
+}
+
+.titlebar {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline-start: 20px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.titlebar-brand {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+}
+
+.titlebar-brand img {
+  width: 17px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.window-close {
+  height: 40px;
+  width: 48px;
+  flex: none;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 21px;
+  line-height: 1;
+}
+
+.window-close:hover:not(:disabled) {
+  background: var(--accent-soft);
+  color: var(--accent-text);
+}
+
+#screen > * {
+  min-height: 536px;
+}
+
+h1 {
+  font-size: 30px;
+  line-height: 1.23;
+  font-weight: 500;
+  letter-spacing: -0.7px;
+  margin: 0;
+  white-space: pre-line;
+}
+
+.window-footer {
+  min-height: 78px;
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid var(--line);
+  background: var(--footer);
+}
+
+[data-screen='welcome'] .window-footer {
+  background: var(--welcome-footer);
+}
+
+.footer-actions {
+  display: flex;
+  gap: 10px;
+  margin-inline-start: auto;
+}
+
+[data-action='next']::after {
+  content: '›';
+  margin-inline-start: 18px;
+}
+
+[dir='rtl'] [data-action='next']::after {
+  content: '‹';
+}
+
+.button {
+  border: 1px solid var(--line);
+  border-bottom-color: var(--muted);
+  border-radius: 6px;
+  background: var(--field);
+  color: var(--text);
+  padding: 9px 22px;
+  min-width: 108px;
+  min-height: 40px;
+  line-height: 1.35;
+  font-size: 14px;
+}
+
+.button:hover:not(:disabled) {
+  background: var(--hover);
+}
+
+.button.primary {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+  border-bottom-color: var(--accent-hover);
+}
+
+.button.primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.button.quiet {
+  border-color: transparent;
+  background: transparent;
+  padding-inline: 12px;
+  min-width: 0;
+  color: var(--muted);
+}
+
+.text-button {
+  border: 0;
+  padding: 0;
+  color: var(--accent);
+  background: none;
+  font-size: 13px;
+  text-align: start;
+}
+
+.text-button:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.startup-error {
+  margin: 0;
+  padding: 12px 32px;
+  color: var(--accent-text);
+  background: var(--accent-soft);
+}
+
+.split-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+}
+
+.brand-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--panel);
+}
+
+.brand-panel img {
+  width: 252px;
+  height: 252px;
+  max-width: 85%;
+  object-fit: contain;
+}
+
+.welcome-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 53px 48px 46px;
+}
+
+.welcome-main h1 {
+  font-size: 38px;
+  line-height: 1.16;
+  letter-spacing: -1.2px;
+  margin-bottom: 24px;
+}
+
+.welcome-copy {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--muted);
+}
+
+.welcome-copy p {
+  margin: 0 0 10px;
+}
+
+.device-info {
+  margin-top: auto;
+  font-size: 13px;
+  padding-top: 18px;
+}
+
+.device-info p {
+  margin: 0 0 4px;
+}
+
+.version {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 19px;
+}
+
+.version button {
+  margin-inline-start: 12px;
+  font-size: inherit;
+  color: inherit;
+}
+
+dialog {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0;
+  width: min(560px, calc(100vw - 40px));
+  max-height: 85vh;
+  box-shadow: 0 20px 80px #34222a29;
+  color: var(--text);
+  background: var(--surface);
+}
+
+dialog::backdrop {
+  background: #28203245;
+}
+
+.dialog-body {
+  padding: 28px 32px;
+}
+
+.dialog-body h2 {
+  font-size: 23px;
+  margin: 0 0 14px;
+  font-weight: 500;
+}
+
+#dialog-content {
+  white-space: pre-line;
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+dialog form {
+  padding: 16px 26px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: flex-end;
+  background: var(--footer);
+}
+
+@media (max-width: 800px) {
+  body {
+    padding: 12px;
+  }
+
+  .welcome-main {
+    padding: 28px 24px;
+  }
+}
+
+@media (max-width: 560px) {
+  body {
+    padding: 0;
+    display: block;
+  }
+
+  .installer {
+    border-radius: 0;
+    border: 0;
+    min-height: 100vh;
+  }
+
+  .split-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .brand-panel {
+    padding: 18px;
+  }
+
+  .brand-panel img {
+    width: 130px;
+    height: 110px;
+  }
+
+  .window-footer {
+    padding: 16px;
+    flex-wrap: wrap;
+  }
+
+  .button {
+    min-width: 80px;
+    padding-inline: 16px;
+  }
+
+  .footer-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .welcome-main h1 {
+    font-size: 32px;
+  }
+}
+
+@media (forced-colors: active) {
+  .installer,
+  .button {
+    border: 1px solid CanvasText;
+  }
+
+  .brand-panel {
+    background: #303238;
+    forced-color-adjust: none;
+  }
+}

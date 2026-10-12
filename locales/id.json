@@ -1,0 +1,17 @@
+{
+  "app.title": "Instalasi {brand}",
+  "cancel": "Batal",
+  "close": "Tutup",
+  "close.label": "Tutup penginstal",
+  "next": "Lanjut",
+  "welcome.title": "Selamat datang di\n{brand}",
+  "welcome.lead": "Instal Linux berdampingan dengan macOS.",
+  "welcome.body": "Pilih desktop dan siapkan ruang untuk instalasi baru Anda.",
+  "device.details": "Lihat detail perangkat",
+  "device.title": "Mac Anda",
+  "version": "Penginstal v{version}",
+  "credits": "Kredit",
+  "credits.body": "Logo Asahi Linux dibuat oleh soundflora* dan Hector Martin, dengan lisensi CC BY-SA 4.0.",
+  "demo.title": "Ini adalah pratinjau, jadi Anda tidak bisa tutupnya.",
+  "demo.device": "MacBook Air (M3, 2024)\nBoard: J613"
+}

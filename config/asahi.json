@@ -1,0 +1,36 @@
+{
+  "brand": {
+    "name": "Asahi Linux",
+    "logo": "assets/asahi-logo-darkbg.svg",
+    "mark": "assets/asahi-logomark.svg"
+  },
+  "theme": {
+    "accent": "#a33d58",
+    "accentHover": "#842b43",
+    "accentSoft": "#f6edf0",
+    "accentText": "#78334b",
+    "text": "#25262b",
+    "muted": "#64636c",
+    "line": "#e7e5e9",
+    "surface": "#fdfdfe",
+    "background": "#eeedf3",
+    "panel": "#303238",
+    "footer": "#f9f8fb",
+    "welcomeFooter": "#eeedf2",
+    "field": "#ffffff",
+    "hover": "#f5f2f6"
+  },
+  "defaultLocale": "en-AU",
+  "locales": {
+    "en-AU": {
+      "file": "locales/en-AU.json",
+      "dir": "ltr"
+    },
+    "id": {
+      "file": "locales/id.json",
+      "dir": "ltr"
+    }
+  },
+  "version": "1.5.3",
+  "deviceName": "MacBook Air (M3, 2024)"
+}

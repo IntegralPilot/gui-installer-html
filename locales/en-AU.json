@@ -1,0 +1,17 @@
+{
+  "app.title": "{brand} Setup",
+  "cancel": "Cancel",
+  "close": "Close",
+  "close.label": "Close installer",
+  "next": "Next",
+  "welcome.title": "Welcome to\n{brand}",
+  "welcome.lead": "Install Linux alongside macOS.",
+  "welcome.body": "Choose a desktop and make room for your new installation.",
+  "device.details": "View device details",
+  "device.title": "Your Mac",
+  "version": "Installer v{version}",
+  "credits": "Credits",
+  "credits.body": "Asahi Linux logo by soundflora* and Hector Martin, licensed under CC BY-SA 4.0.",
+  "demo.title": "This is a preview, so it can't be closed.",
+  "demo.device": "MacBook Air (M3, 2024)\nBoard: J613"
+}
