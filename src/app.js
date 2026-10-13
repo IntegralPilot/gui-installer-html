@@ -1,6 +1,7 @@
 import { loadConfig } from './config.js';
 import { createI18n } from './i18n.js';
 import { mountStorage } from './storage.js';
+import { mountProgress } from './progress.js';
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -21,7 +22,7 @@ try {
       ...values,
     });
   const root = $('#installer');
-  const screens = ['welcome', 'edition', 'storage', 'review'];
+  const screens = ['welcome', 'edition', 'storage', 'review', 'progress'];
   let edition = config.editions[0];
   const label = (item) => (item.labelKey ? t(item.labelKey) : item.label);
   const storage = mountStorage({
@@ -35,6 +36,8 @@ try {
       }
     },
   });
+
+  const progress = mountProgress({ t, locale: i18n.locale });
 
   document.documentElement.lang = i18n.locale;
   document.documentElement.dir = i18n.dir;
@@ -84,7 +87,13 @@ try {
     root.dataset.screen = name;
     root.setAttribute('aria-labelledby', `${name}-title`);
     $('[data-action="back"]').hidden = name === 'welcome';
-    $('[data-action="next"]').disabled = name === 'storage' && !storage.valid();
+    const installing = name === 'progress';
+    $('[data-action="back"]').disabled = installing;
+    $('[data-action="next"]').disabled =
+      installing || (name === 'storage' && !storage.valid());
+    document.querySelectorAll('[data-action="close"]').forEach((button) => {
+      button.disabled = installing;
+    });
     $('[data-action="next"]').textContent = t(
       name === 'review' ? 'install' : 'next',
     );
@@ -138,14 +147,8 @@ try {
         if (root.dataset.screen !== 'review') {
           showScreen(screens[screens.indexOf(root.dataset.screen) + 1]);
         } else {
-          const event = new CustomEvent('installer:install', {
-            bubbles: true,
-            cancelable: true,
-            detail: { edition: edition.id, ...storage.selection() },
-          });
-          if (root.dispatchEvent(event)) {
-            showMessage(t('install'), t('demo.install'));
-          }
+          showScreen('progress');
+          progress.start({ edition: edition.id, ...storage.selection() });
         }
         break;
       case 'back':
@@ -161,6 +164,9 @@ try {
       }
       case 'device':
         showMessage(t('device.title'), t('demo.device'));
+        break;
+      case 'about':
+        showMessage(t('about.title'), t('about.body'));
         break;
       case 'credits':
         showMessage(t('credits'), t('credits.body'));

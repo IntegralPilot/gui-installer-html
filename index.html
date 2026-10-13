@@ -207,6 +207,57 @@
             <span data-i18n="review.power"></span>
           </div>
         </section>
+        <div id="progress" class="split-body" hidden>
+          <aside class="brand-panel"><img data-asset="logo" alt="" /></aside>
+          <section class="progress-main">
+            <h1
+              id="progress-title"
+              tabindex="-1"
+              data-i18n="progress.title"
+            ></h1>
+            <p class="intro">
+              <span data-i18n="progress.power"></span>
+              <span
+                id="resize-warning"
+                data-i18n="progress.resize"
+                hidden
+              ></span>
+            </p>
+            <div class="progress-stage">
+              <strong id="progress-label" role="status"></strong>
+              <span id="progress-value"></span>
+            </div>
+            <progress
+              id="progress-bar"
+              max="100"
+              aria-labelledby="progress-label"
+            ></progress>
+            <p id="progress-step" class="progress-meta"></p>
+            <p id="progress-error" class="field-error" role="alert" hidden></p>
+            <button
+              id="progress-retry"
+              class="text-button"
+              data-i18n="progress.retry"
+              hidden
+            ></button>
+            <details class="logs">
+              <summary data-i18n="progress.details"></summary>
+              <pre
+                id="progress-log"
+                tabindex="0"
+                data-label="progress.details"
+              ></pre>
+            </details>
+            <div class="waiting-note">
+              <p data-i18n="progress.waiting"></p>
+              <button
+                class="text-button"
+                data-action="about"
+                data-i18n="about.title"
+              ></button>
+            </div>
+          </section>
+        </div>
       </div>
       <footer class="window-footer">
         <button

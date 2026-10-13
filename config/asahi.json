@@ -30,6 +30,10 @@
       "file": "locales/en-AU.json",
       "dir": "ltr"
     },
+    "en-RTL": {
+      "file": "locales/en-AU.json",
+      "dir": "rtl"
+    },
     "id": {
       "file": "locales/id.json",
       "dir": "ltr"

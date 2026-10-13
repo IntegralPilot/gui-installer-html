@@ -68,5 +68,22 @@
   "review.size": "Ruang untuk Linux",
   "review.resize": "{volume} (ubah ukuran dari {before} GB menjadi {after} GB)",
   "review.power": "Sambungkan Mac ke sumber daya. Biarkan jendela ini terbuka hingga instalasi selesai.",
-  "demo.install": "Instalasi belum terhubung dalam pratinjau ini."
+  "progress.title": "Menginstal\n{brand}",
+  "progress.power": "Biarkan Mac tersambung ke sumber daya dan jangan tutup jendela ini.",
+  "progress.resize": "Mac Anda mungkin berhenti merespons saat ukuran penyimpanan diubah.",
+  "progress.preparing": "Menyiapkan instalasi",
+  "progress.writing": "Menulis berkas sistem",
+  "progress.step": "Langkah {step} dari {total}",
+  "progress.details": "Tampilkan detail instalasi",
+  "progress.waiting": "Setelah instalasi, Anda dapat memilih macOS atau Linux di Pilihan Mulai.",
+  "about.title": "Tentang {brand}",
+  "about.body": "Linux untuk Apple Silicon.",
+  "progress.resizing": "Mengubah ukuran penyimpanan",
+  "progress.finalising": "Menyiapkan langkah berikutnya",
+  "progress.completeTitle": "Siap untuk tahap akhir",
+  "progress.complete": "Berkas sistem sudah siap",
+  "progress.failedTitle": "Instalasi terhenti",
+  "progress.failed": "Instalasi tidak dapat diselesaikan. Lihat detail di bawah.",
+  "progress.connectionError": "Tidak dapat membaca kemajuan instalasi. Instalasi mungkin masih berjalan.",
+  "progress.retry": "Periksa lagi"
 }

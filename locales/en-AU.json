@@ -68,5 +68,22 @@
   "review.size": "Space for Linux",
   "review.resize": "{volume} (resize from {before} GB to {after} GB)",
   "review.power": "Connect your Mac to power. Keep this window open until installation finishes.",
-  "demo.install": "Installation is not connected in this preview."
+  "progress.title": "Installing\n{brand}",
+  "progress.power": "Keep your Mac connected to power and leave this window open.",
+  "progress.resize": "Your Mac may stop responding while storage is being resized.",
+  "progress.preparing": "Preparing installation",
+  "progress.writing": "Writing system files",
+  "progress.step": "Step {step} of {total}",
+  "progress.details": "Show installation details",
+  "progress.waiting": "You can choose between macOS and Linux in Startup Options after setup.",
+  "about.title": "About {brand}",
+  "about.body": "Linux for Apple Silicon.",
+  "progress.resizing": "Resizing storage",
+  "progress.finalising": "Preparing the next step",
+  "progress.completeTitle": "Ready to finalise",
+  "progress.complete": "System files are ready",
+  "progress.failedTitle": "Installation stopped",
+  "progress.failed": "Installation could not be completed. See the details below.",
+  "progress.connectionError": "Could not read installation progress. Installation may still be running.",
+  "progress.retry": "Check again"
 }
