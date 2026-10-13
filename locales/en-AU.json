@@ -56,5 +56,17 @@
   "storage.recovery": "Recovery",
   "retry": "Try again",
   "storage.loading": "Loading disk information…",
-  "storage.loadError": "Could not load disk information. Try again."
+  "storage.loadError": "Could not load disk information. Try again.",
+  "install": "Install",
+  "edition.bootSystem": "UEFI boot environment",
+  "review.title": "Ready to install",
+  "review.intro": "Review your choices before making changes to your Mac.",
+  "review.name": "Volume Name",
+  "review.system": "Installation",
+  "review.edition": "Edition",
+  "review.location": "Location",
+  "review.size": "Space for Linux",
+  "review.resize": "{volume} (resize from {before} GB to {after} GB)",
+  "review.power": "Connect your Mac to power. Keep this window open until installation finishes.",
+  "demo.install": "Installation is not connected in this preview."
 }

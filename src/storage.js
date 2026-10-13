@@ -236,6 +236,18 @@ export function mountStorage({ t, label, locale, defaultName, onChange }) {
   return {
     load,
     valid,
+    summary: () => ({
+      name: name.value.trim(),
+      size: t('size.gb', { size: n(size.valueAsNumber) }),
+      location:
+        target.kind === 'free'
+          ? label(target)
+          : t('review.resize', {
+              volume: label(target),
+              before: n(target.sizeGB),
+              after: n(target.sizeGB - size.valueAsNumber),
+            }),
+    }),
     selection: () => ({
       disk: disk.id,
       target: target.id,

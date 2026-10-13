@@ -4,7 +4,8 @@
     "logo": "assets/asahi-logo-darkbg.svg",
     "mark": "assets/asahi-logomark.svg",
     "distribution": "Fedora Asahi Remix",
-    "defaultName": "Asahi"
+    "defaultName": "Asahi",
+    "system": "Fedora Asahi Remix 44"
   },
   "theme": {
     "accent": "#a33d58",
@@ -59,7 +60,8 @@
       "id": "uefi",
       "labelKey": "edition.uefi",
       "description": "edition.uefiBody",
-      "empty": "edition.bootOnly"
+      "empty": "edition.bootOnly",
+      "systemKey": "edition.bootSystem"
     }
   ]
 }

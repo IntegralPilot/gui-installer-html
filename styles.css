@@ -634,6 +634,63 @@ input[type='text'] {
   margin-top: 0.1875rem;
 }
 
+[data-screen='review'] [data-action='next']::after {
+  content: none;
+}
+
+.review-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.review-table th,
+.review-table td {
+  padding: 0.6875rem 0;
+  border-bottom: 1px solid var(--line);
+  text-align: start;
+  vertical-align: top;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.review-table th {
+  font-weight: 400;
+  width: 37%;
+  padding-inline-end: 0.75rem;
+  color: var(--muted);
+}
+
+.review-table td {
+  font-weight: 500;
+}
+
+.review-table tr:first-child > * {
+  padding-top: 0;
+}
+
+.power-note {
+  background: var(--hover);
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.75rem 0.9375rem;
+  margin-top: 1.25rem;
+  border-radius: 0.4375rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.power-note svg {
+  width: 1.3125rem;
+  height: 1.4375rem;
+  stroke: var(--accent);
+  fill: none;
+  stroke-width: 1.4;
+  flex: none;
+}
+
 dialog {
   border: 1px solid var(--line);
   border-radius: 0.75rem;

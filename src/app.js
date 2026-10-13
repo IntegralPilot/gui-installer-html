@@ -21,7 +21,7 @@ try {
       ...values,
     });
   const root = $('#installer');
-  const screens = ['welcome', 'edition', 'storage'];
+  const screens = ['welcome', 'edition', 'storage', 'review'];
   let edition = config.editions[0];
   const label = (item) => (item.labelKey ? t(item.labelKey) : item.label);
   const storage = mountStorage({
@@ -85,9 +85,24 @@ try {
     root.setAttribute('aria-labelledby', `${name}-title`);
     $('[data-action="back"]').hidden = name === 'welcome';
     $('[data-action="next"]').disabled = name === 'storage' && !storage.valid();
+    $('[data-action="next"]').textContent = t(
+      name === 'review' ? 'install' : 'next',
+    );
     const step = $(`#${name} .step`);
     if (step) {
       step.textContent = t('wizard.step', { step: screens.indexOf(name) });
+    }
+    if (name === 'review') {
+      const values = {
+        ...storage.summary(),
+        system: edition.systemKey ? t(edition.systemKey) : config.brand.system,
+        edition: label(edition),
+      };
+      $('#review')
+        .querySelectorAll('[data-value]')
+        .forEach((node) => {
+          node.textContent = values[node.dataset.value];
+        });
     }
     $(`#${name}-title`).focus();
     if (name === 'storage') {
@@ -114,15 +129,23 @@ try {
 
     switch (button.dataset.action) {
       case 'next':
-        if (root.dataset.screen !== 'storage') {
+        if (
+          ['storage', 'review'].includes(root.dataset.screen) &&
+          !storage.valid()
+        ) {
+          break;
+        }
+        if (root.dataset.screen !== 'review') {
           showScreen(screens[screens.indexOf(root.dataset.screen) + 1]);
-        } else if (storage.valid()) {
-          root.dispatchEvent(
-            new CustomEvent('installer:next', {
-              bubbles: true,
-              detail: { edition: edition.id, ...storage.selection() },
-            }),
-          );
+        } else {
+          const event = new CustomEvent('installer:install', {
+            bubbles: true,
+            cancelable: true,
+            detail: { edition: edition.id, ...storage.selection() },
+          });
+          if (root.dispatchEvent(event)) {
+            showMessage(t('install'), t('demo.install'));
+          }
         }
         break;
       case 'back':

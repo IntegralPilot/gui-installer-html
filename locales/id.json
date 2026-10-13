@@ -56,5 +56,17 @@
   "storage.recovery": "Pemulihan",
   "retry": "Coba lagi",
   "storage.loading": "Memuat informasi disk…",
-  "storage.loadError": "Tidak dapat memuat informasi disk. Coba lagi."
+  "storage.loadError": "Tidak dapat memuat informasi disk. Coba lagi.",
+  "install": "Instal",
+  "edition.bootSystem": "Lingkungan boot UEFI",
+  "review.title": "Siap menginstal",
+  "review.intro": "Tinjau pilihan Anda sebelum membuat perubahan pada Mac.",
+  "review.name": "Nama Volume",
+  "review.system": "Instalasi",
+  "review.edition": "Edisi",
+  "review.location": "Lokasi",
+  "review.size": "Ruang untuk Linux",
+  "review.resize": "{volume} (ubah ukuran dari {before} GB menjadi {after} GB)",
+  "review.power": "Sambungkan Mac ke sumber daya. Biarkan jendela ini terbuka hingga instalasi selesai.",
+  "demo.install": "Instalasi belum terhubung dalam pratinjau ini."
 }
