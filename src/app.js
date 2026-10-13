@@ -87,9 +87,8 @@ try {
   }
 
   for (const [locale, info] of Object.entries(config.locales)) {
+    if (info.hidden) continue;
     const option = new Option(info.selfName, locale);
-    option.hidden = Boolean(info.hidden);
-    option.disabled = Boolean(info.hidden);
     option.lang = info.formatLocale || locale;
     option.dir = info.dir || 'ltr';
     language.add(option);
@@ -100,7 +99,9 @@ try {
       config.locales[i18n.locale].formatLocale || i18n.locale;
     document.documentElement.dir = i18n.dir;
     document.title = t('app.title');
-    language.value = i18n.locale;
+    language.value = config.locales[i18n.locale].hidden
+      ? config.defaultLocale
+      : i18n.locale;
     document.querySelectorAll('[data-i18n]').forEach((node) => {
       node.textContent = t(node.dataset.i18n);
     });
@@ -130,7 +131,9 @@ try {
       history.replaceState(null, '', url);
     } catch (error) {
       console.error(error);
-      language.value = i18n.locale;
+      language.value = config.locales[i18n.locale].hidden
+        ? config.defaultLocale
+        : i18n.locale;
       showMessage(t('language'), t('language.loadError'));
     } finally {
       language.disabled = false;
