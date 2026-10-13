@@ -215,7 +215,7 @@ export function mountStorage({ t, label, n, defaultName, onChange }) {
       select(button.value);
     }
   });
-  $('#disk-map').addEventListener('keydown', (event) => {
+  document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
       $('#disk-map')
         .querySelectorAll('.unavailable')
@@ -227,7 +227,28 @@ export function mountStorage({ t, label, n, defaultName, onChange }) {
       const region = target.closest('.unavailable');
       if (region && !region.contains(relatedTarget)) {
         region.classList.remove('dismissed');
+        region.classList.add('show-tooltip');
+        const tooltip = region.querySelector('.tooltip');
+        tooltip.style.left = `${Math.max(
+          0,
+          Math.min(
+            region.offsetLeft + (region.offsetWidth - tooltip.offsetWidth) / 2,
+            $('#disk-map').clientWidth - tooltip.offsetWidth,
+          ),
+        )}px`;
       }
+    });
+  }
+  for (const event of ['focusout', 'pointerout']) {
+    $('#disk-map').addEventListener(event, ({ target, relatedTarget }) => {
+      const region = target.closest('.unavailable');
+      if (!region || region.contains(relatedTarget)) return;
+      // Allow the pointer to cross the gap between the region and its tooltip.
+      setTimeout(() => {
+        if (!region.matches(':hover, :focus-within')) {
+          region.classList.remove('show-tooltip');
+        }
+      }, 300);
     });
   }
 

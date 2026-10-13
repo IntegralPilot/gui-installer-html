@@ -107,5 +107,16 @@
   "shutdown.failed": "Could not confirm shutdown. Try again.",
   "demo.shutdown": "Statistics choice: {choice}.\nThis preview does not shut down your Mac or send statistics.",
   "language": "Language",
-  "language.loadError": "Could not load that language. Try again."
+  "language.loadError": "Could not load that language. Try again.",
+  "accessibility.title": "Accessibility",
+  "accessibility.size": "Interface size",
+  "accessibility.contrast": "Contrast",
+  "accessibility.system": "Use system setting",
+  "accessibility.standard": "Standard",
+  "accessibility.high": "Higher contrast",
+  "accessibility.spacing": "Text spacing",
+  "accessibility.spacious": "Spacious",
+  "accessibility.font": "Font",
+  "accessibility.default": "Default",
+  "accessibility.reset": "Reset to defaults"
 }

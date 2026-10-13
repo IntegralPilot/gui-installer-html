@@ -107,5 +107,16 @@
   "shutdown.failed": "Tidak dapat mengonfirmasi pematian Mac. Coba lagi.",
   "demo.shutdown": "Pilihan statistik: {choice}.\nPratinjau ini tidak mematikan Mac atau mengirim statistik.",
   "language": "Bahasa",
-  "language.loadError": "Tidak dapat memuat bahasa tersebut. Coba lagi."
+  "language.loadError": "Tidak dapat memuat bahasa tersebut. Coba lagi.",
+  "accessibility.title": "Aksesibilitas",
+  "accessibility.size": "Ukuran antarmuka",
+  "accessibility.contrast": "Kontras",
+  "accessibility.system": "Ikuti pengaturan sistem",
+  "accessibility.standard": "Standar",
+  "accessibility.high": "Kontras tinggi",
+  "accessibility.spacing": "Spasi teks",
+  "accessibility.spacious": "Renggang",
+  "accessibility.font": "Jenis huruf",
+  "accessibility.default": "Bawaan",
+  "accessibility.reset": "Pulihkan pengaturan awal"
 }

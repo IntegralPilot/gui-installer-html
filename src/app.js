@@ -3,6 +3,7 @@ import { createI18n } from './i18n.js';
 import { mountStorage } from './storage.js';
 import { mountProgress } from './progress.js';
 import { mountComplete } from './complete.js';
+import { mountAccessibility } from './accessibility.js';
 import { mockJSON as readJSON } from './mock-api.js';
 
 const $ = (selector) => document.querySelector(selector);
@@ -26,6 +27,7 @@ try {
   const n = (value, options) => i18n.number(value, options);
   const root = $('#installer');
   const language = $('#language');
+  mountAccessibility();
   const screens = [
     'welcome',
     'edition',
@@ -83,7 +85,8 @@ try {
   }
 
   function translate() {
-    document.documentElement.lang = i18n.locale;
+    document.documentElement.lang =
+      config.locales[i18n.locale].formatLocale || i18n.locale;
     document.documentElement.dir = i18n.dir;
     document.title = t('app.title');
     language.value = i18n.locale;

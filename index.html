@@ -136,7 +136,7 @@
                   <span data-i18n="unit.gb"></span>
                 </div>
                 <p class="field-help" id="size-limits"></p>
-                <p class="field-error" id="size-error" hidden></p>
+                <p class="field-error" id="size-error" role="alert" hidden></p>
                 <p id="storage-effect" class="storage-effect"></p>
                 <div class="storage-name">
                   <label for="name" data-i18n="storage.name"></label>
@@ -156,6 +156,7 @@
                   <p
                     class="field-error"
                     id="name-error"
+                    role="alert"
                     data-i18n="storage.nameError"
                     hidden
                   ></p>
@@ -300,11 +301,21 @@
                 >
                   <label>
                     <input type="radio" name="metrics" value="yes" required />
-                    <span class="button" data-i18n="yes"></span>
+                    <span class="button">
+                      <svg viewBox="0 0 16 16" aria-hidden="true">
+                        <path d="m3 8 3 3 7-7" />
+                      </svg>
+                      <span data-i18n="yes"></span>
+                    </span>
                   </label>
                   <label>
                     <input type="radio" name="metrics" value="no" required />
-                    <span class="button" data-i18n="no"></span>
+                    <span class="button">
+                      <svg viewBox="0 0 16 16" aria-hidden="true">
+                        <path d="m3 8 3 3 7-7" />
+                      </svg>
+                      <span data-i18n="no"></span>
+                    </span>
                   </label>
                 </fieldset>
                 <p
@@ -319,11 +330,24 @@
         </div>
       </div>
       <footer class="window-footer">
-        <select
-          id="language"
-          class="language-select"
-          data-label="language"
-        ></select>
+        <div class="footer-tools">
+          <select
+            id="language"
+            class="language-select"
+            data-label="language"
+          ></select>
+          <button
+            id="accessibility"
+            class="accessibility-button"
+            aria-haspopup="dialog"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="4" r="2" />
+              <path d="m4 8 8 2 8-2M12 10v5m-4 6 4-6 4 6" />
+            </svg>
+            <span data-i18n="accessibility.title"></span>
+          </button>
+        </div>
         <div class="footer-actions">
           <button
             class="button"
@@ -343,11 +367,64 @@
     <noscript>This installer needs JavaScript enabled.</noscript>
     <dialog id="dialog" aria-labelledby="dialog-title">
       <div class="dialog-body">
-        <h2 id="dialog-title"></h2>
+        <h2 id="dialog-title" tabindex="-1" autofocus></h2>
         <div id="dialog-content"></div>
       </div>
       <form method="dialog">
-        <button class="button primary" data-i18n="close" autofocus></button>
+        <button class="button primary" data-i18n="close"></button>
+      </form>
+    </dialog>
+    <dialog id="accessibility-dialog" aria-labelledby="accessibility-title">
+      <div class="dialog-body">
+        <h2
+          id="accessibility-title"
+          tabindex="-1"
+          autofocus
+          data-i18n="accessibility.title"
+        ></h2>
+        <div class="accessibility-settings">
+          <label for="interface-size" data-i18n="accessibility.size"></label>
+          <select id="interface-size" data-preference="scale">
+            <option value="1">100%</option>
+            <option value="1.25">125%</option>
+            <option value="1.5">150%</option>
+            <option value="2">200%</option>
+          </select>
+          <label for="contrast" data-i18n="accessibility.contrast"></label>
+          <select id="contrast" data-preference="contrast">
+            <option value="system" data-i18n="accessibility.system"></option>
+            <option
+              value="standard"
+              data-i18n="accessibility.standard"
+            ></option>
+            <option value="high" data-i18n="accessibility.high"></option>
+          </select>
+          <label for="text-spacing" data-i18n="accessibility.spacing"></label>
+          <select id="text-spacing" data-preference="spacing">
+            <option
+              value="standard"
+              data-i18n="accessibility.standard"
+            ></option>
+            <option
+              value="spacious"
+              data-i18n="accessibility.spacious"
+            ></option>
+          </select>
+          <label for="font" data-i18n="accessibility.font"></label>
+          <select id="font" data-preference="font">
+            <option value="default" data-i18n="accessibility.default"></option>
+            <option value="opendyslexic">OpenDyslexic</option>
+          </select>
+        </div>
+      </div>
+      <form method="dialog">
+        <button
+          id="accessibility-reset"
+          type="button"
+          class="button"
+          data-i18n="accessibility.reset"
+        ></button>
+        <button class="button primary" data-i18n="close"></button>
       </form>
     </dialog>
     <template id="option">
