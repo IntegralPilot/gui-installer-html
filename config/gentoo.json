@@ -1,0 +1,29 @@
+{
+  "brand": {
+    "name": "Gentoo Linux",
+    "logo": "assets/gentoo-logo.svg",
+    "mark": "assets/gentoo-signet.svg",
+    "distribution": "Gentoo Linux",
+    "defaultName": "Gentoo",
+    "system": "Gentoo Linux"
+  },
+  "theme": {
+    "accent": "#54487a",
+    "accentHover": "#41365f",
+    "accentSoft": "#f0edf8",
+    "accentText": "#493c6b",
+    "background": "#eeebf4",
+    "panel": "#e6e1f0",
+    "footer": "#f8f6fb",
+    "welcomeFooter": "#e9e4f1",
+    "hover": "#f0edf6"
+  },
+  "messages": {
+    "en-AU": {
+      "credits.body": "Gentoo logo by the Gentoo Foundation and Lennart Andre Rolland, licensed under CC BY-SA 2.5.\nhttps://www.gentoo.org/inside-gentoo/artwork/gentoo-logo.html\nhttps://creativecommons.org/licenses/by-sa/2.5/"
+    },
+    "id": {
+      "credits.body": "Logo Gentoo oleh Gentoo Foundation dan Lennart Andre Rolland, berlisensi CC BY-SA 2.5.\nhttps://www.gentoo.org/inside-gentoo/artwork/gentoo-logo.html\nhttps://creativecommons.org/licenses/by-sa/2.5/"
+    }
+  }
+}

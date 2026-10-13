@@ -1110,7 +1110,7 @@ dialog form {
   }
 
   .brand-panel {
-    background: #303238;
+    background: var(--panel);
     forced-color-adjust: none;
   }
 }
