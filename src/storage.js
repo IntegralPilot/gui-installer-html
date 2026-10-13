@@ -44,7 +44,7 @@ function validateDisk(disk) {
 }
 
 export function mountStorage({ t, label, locale, defaultName, onChange }) {
-  const number = new Intl.NumberFormat(locale);
+  const number = new Intl.NumberFormat(locale == "en-RTL" ? "en-AU" : locale);
   const n = (value) => number.format(value);
   const size = $('#size');
   const name = $('#name');

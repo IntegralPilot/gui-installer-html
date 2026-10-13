@@ -5,7 +5,7 @@ export function mountProgress({ t, locale }) {
   const bar = $('progress-bar');
   const error = $('progress-error');
   const retry = $('progress-retry');
-  const percent = new Intl.NumberFormat(locale, {
+  const percent = new Intl.NumberFormat(locale == "en-RTL" ? "en-AU" : locale, {
     style: 'percent',
     maximumFractionDigits: 0,
   });
