@@ -1,0 +1,23 @@
+{
+  "version": "0.9.2",
+  "device": {
+    "productName": "MacBook Air (13-inch, M3, 2024)",
+    "soc": "Apple M3",
+    "deviceClass": "j613ap",
+    "productType": "Mac15,12",
+    "boardId": "0x30",
+    "chipId": "0x8122",
+    "systemFirmware": "mBoot-20457.1.29",
+    "bootUuid": "DAF96526-C120-4DE9-AA73-03C93081B368",
+    "bootVgid": "DAF96526-C120-4DE9-AA73-03C93081B368",
+    "defaultBootVgid": "FC869471-96A1-470A-AE63-681C1276F01D",
+    "bootMode": "macOS",
+    "osVersion": "27.0 (26A428)",
+    "osRestoreVersion": "26.1.428.0.0,0",
+    "mainFirmwareVersion": "27.0 (26A428)",
+    "fallbackSystemFirmware": null,
+    "sfrVersion": "26.1.428.0.0,0",
+    "systemRecoveryVersion": "25.7.83.0.0,0 (26.6.2 25G83)",
+    "loginUser": "mreeve27"
+  }
+}

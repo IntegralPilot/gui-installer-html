@@ -10,7 +10,18 @@ const $ = (selector) => document.querySelector(selector);
 
 try {
   const params = new URLSearchParams(location.search);
-  const config = await loadConfig(params.get('theme'));
+  const [config, info] = await Promise.all([
+    loadConfig(params.get('theme')),
+    readJSON('/api/info.json', {
+      cache: 'no-store',
+      signal: AbortSignal.timeout(10000),
+    }),
+  ]);
+  if (!info?.version || !info.device?.productName) {
+    throw new Error(
+      'Missing installer version or product name in /api/info.json',
+    );
+  }
   let i18n = await createI18n(
     config,
     params.get('lang') || navigator.languages,
@@ -19,7 +30,7 @@ try {
     i18n.t(key, {
       brand: config.brand.name,
       distribution: config.brand.distribution,
-      version: config.version,
+      version: info.version,
       step: 1,
       total: 3,
       ...values,
@@ -63,7 +74,7 @@ try {
   document.querySelectorAll('[data-asset]').forEach((node) => {
     node.src = config.brand[node.dataset.asset];
   });
-  $('[data-value="device"]').textContent = config.deviceName;
+  $('[data-value="device"]').textContent = info.device.productName;
 
   for (const item of config.editions) {
     const option = $('#option').content.cloneNode(true);
@@ -236,9 +247,20 @@ try {
         showMessage(title, image);
         break;
       }
-      case 'device':
-        showMessage(t('device.title'), t('demo.device'));
+      case 'device': {
+        const details = document.createElement('dl');
+        details.className = 'device-details';
+        for (const [key, value] of Object.entries(info.device)) {
+          const term = document.createElement('dt');
+          term.textContent = t(`device.${key}`);
+          const description = document.createElement('dd');
+          description.dir = 'auto';
+          description.textContent = value ?? t('device.none');
+          details.append(term, description);
+        }
+        showMessage(t('device.title'), details);
         break;
+      }
       case 'metrics':
         complete.details();
         break;

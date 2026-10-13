@@ -1103,6 +1103,22 @@ dialog::backdrop {
   overflow-wrap: anywhere;
 }
 
+.device-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: 0.5rem 1rem;
+  margin: 0;
+}
+
+.device-details dt {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.device-details dd {
+  margin: 0;
+}
+
 dialog form {
   padding: 1rem 1.625rem;
   border-top: 1px solid var(--line);

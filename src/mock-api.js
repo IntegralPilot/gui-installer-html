@@ -13,7 +13,10 @@ export async function mockJSON(path, options = {}) {
   const url = new URL(path, location.href);
   const method = options.method || 'GET';
 
-  if (url.pathname === '/api/telemetry.json' && method === 'GET') {
+  if (
+    method === 'GET' &&
+    ['/api/info.json', '/api/telemetry.json'].includes(url.pathname)
+  ) {
     return readJSON(path, options);
   }
 
