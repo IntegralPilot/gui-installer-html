@@ -2,7 +2,8 @@
   "brand": {
     "name": "Asahi Linux",
     "logo": "assets/asahi-logo-darkbg.svg",
-    "mark": "assets/asahi-logomark.svg"
+    "mark": "assets/asahi-logomark.svg",
+    "distribution": "Fedora Asahi Remix"
   },
   "theme": {
     "accent": "#a33d58",
@@ -32,5 +33,31 @@
     }
   },
   "version": "1.5.3",
-  "deviceName": "MacBook Air (M3, 2024)"
+  "deviceName": "MacBook Air (M3, 2024)",
+  "editions": [
+    {
+      "id": "kde",
+      "label": "KDE Plasma",
+      "description": "edition.kde",
+      "image": "assets/kde-plasma.png"
+    },
+    {
+      "id": "gnome",
+      "label": "GNOME",
+      "description": "edition.gnome",
+      "image": "assets/gnome.png"
+    },
+    {
+      "id": "minimal",
+      "labelKey": "edition.minimal",
+      "description": "edition.minimalBody",
+      "empty": "edition.noDesktop"
+    },
+    {
+      "id": "uefi",
+      "labelKey": "edition.uefi",
+      "description": "edition.uefiBody",
+      "empty": "edition.bootOnly"
+    }
+  ]
 }

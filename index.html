@@ -13,7 +13,7 @@
       id="installer"
       data-screen="welcome"
       class="installer"
-      aria-labelledby="screen-title"
+      aria-labelledby="welcome-title"
       hidden
     >
       <header class="titlebar">
@@ -30,10 +30,10 @@
         </button>
       </header>
       <div id="screen">
-        <div class="split-body">
+        <div id="welcome" class="split-body">
           <aside class="brand-panel"><img data-asset="logo" alt="" /></aside>
           <section class="welcome-main">
-            <h1 id="screen-title" tabindex="-1" data-i18n="welcome.title"></h1>
+            <h1 id="welcome-title" tabindex="-1" data-i18n="welcome.title"></h1>
             <div class="welcome-copy">
               <p data-i18n="welcome.lead"></p>
               <p data-i18n="welcome.body"></p>
@@ -56,6 +56,38 @@
             </div>
           </section>
         </div>
+        <section id="edition" class="window-body" hidden>
+          <div class="page-heading">
+            <h1 id="edition-title" tabindex="-1" data-i18n="edition.title"></h1>
+            <span class="step" data-i18n="wizard.step"></span>
+          </div>
+          <p class="intro" data-i18n="edition.intro"></p>
+          <div class="choice-layout">
+            <fieldset
+              id="editions"
+              class="option-list"
+              data-label="edition.options"
+            ></fieldset>
+            <figure class="desktop-preview">
+              <button class="desktop-image" data-action="preview">
+                <img id="desktop-image" alt="" />
+              </button>
+              <div class="no-desktop" hidden>
+                <span aria-hidden="true">&gt;_</span>
+                <p id="desktop-empty"></p>
+              </div>
+              <figcaption aria-live="polite">
+                <h2 id="edition-name"></h2>
+                <p id="edition-description"></p>
+                <button
+                  class="text-button"
+                  data-action="preview"
+                  data-i18n="preview.enlarge"
+                ></button>
+              </figcaption>
+            </figure>
+          </div>
+        </section>
       </div>
       <footer class="window-footer">
         <button
@@ -64,6 +96,12 @@
           data-i18n="cancel"
         ></button>
         <div class="footer-actions">
+          <button
+            class="button"
+            data-action="back"
+            data-i18n="back"
+            hidden
+          ></button>
           <button
             class="button primary"
             data-action="next"
@@ -83,5 +121,11 @@
         <button class="button primary" data-i18n="close" autofocus></button>
       </form>
     </dialog>
+    <template id="edition-option">
+      <label class="option">
+        <input type="radio" name="edition" />
+        <span></span>
+      </label>
+    </template>
   </body>
 </html>

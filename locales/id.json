@@ -13,5 +13,20 @@
   "credits": "Kredit",
   "credits.body": "Logo Asahi Linux dibuat oleh soundflora* dan Hector Martin, dengan lisensi CC BY-SA 4.0.",
   "demo.title": "Ini adalah pratinjau, jadi Anda tidak bisa tutupnya.",
-  "demo.device": "MacBook Air (M3, 2024)\nBoard: J613"
+  "demo.device": "MacBook Air (M3, 2024)\nBoard: J613",
+  "back": "Kembali",
+  "wizard.step": "{step} dari {total}",
+  "edition.title": "Pilih yang ingin diinstal",
+  "edition.intro": "Pilih edisi {distribution} atau lingkungan boot.",
+  "edition.options": "Pilihan instalasi",
+  "edition.kde": "Desktop tradisional dengan bilah tugas, menu aplikasi, dan pengaturan yang fleksibel.",
+  "edition.gnome": "Desktop sederhana dengan ikhtisar aktivitas, ruang kerja, dan gestur.",
+  "edition.minimal": "Minimal",
+  "edition.minimalBody": "Instalasi minimal {distribution} tanpa desktop grafis. Tambahkan perangkat lunak yang Anda perlukan setelah instalasi.",
+  "edition.noDesktop": "Tidak menyertakan desktop",
+  "edition.uefi": "UEFI saja",
+  "edition.uefiBody": "Siapkan lingkungan boot untuk menginstal sistem operasi lain. Pilihan ini tidak menginstal {distribution} atau desktop.",
+  "edition.bootOnly": "Lingkungan boot saja",
+  "preview.title": "Pratinjau desktop {edition}",
+  "preview.enlarge": "Perbesar pratinjau"
 }

@@ -57,6 +57,14 @@ export async function loadConfig(override) {
   for (const key of ['logo', 'mark']) {
     config.brand[key] = localURL(config.brand[key]);
   }
+  if (!Array.isArray(config.editions) || !config.editions.length) {
+    throw new Error('No editions are configured');
+  }
+  for (const edition of config.editions) {
+    if (edition.image) {
+      edition.image = localURL(edition.image);
+    }
+  }
   if (!config.locales[config.defaultLocale]) {
     throw new Error('Default locale is not configured');
   }

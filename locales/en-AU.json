@@ -13,5 +13,20 @@
   "credits": "Credits",
   "credits.body": "Asahi Linux logo by soundflora* and Hector Martin, licensed under CC BY-SA 4.0.",
   "demo.title": "This is a preview, so it can't be closed.",
-  "demo.device": "MacBook Air (M3, 2024)\nBoard: J613"
+  "demo.device": "MacBook Air (M3, 2024)\nBoard: J613",
+  "back": "Back",
+  "wizard.step": "{step} of {total}",
+  "edition.title": "Choose what to install",
+  "edition.intro": "Choose an edition of {distribution}, or a boot environment.",
+  "edition.options": "Installation options",
+  "edition.kde": "A traditional desktop with a taskbar, application menu and flexible settings.",
+  "edition.gnome": "A clean desktop built around an activities overview, workspaces and gestures.",
+  "edition.minimal": "Minimal",
+  "edition.minimalBody": "A minimal {distribution} installation without a graphical desktop. Add the software you need after installation.",
+  "edition.noDesktop": "No desktop included",
+  "edition.uefi": "UEFI only",
+  "edition.uefiBody": "Set up a boot environment for installing another operating system. This option does not install {distribution} or a desktop.",
+  "edition.bootOnly": "Boot environment only",
+  "preview.title": "{edition} desktop preview",
+  "preview.enlarge": "Enlarge preview"
 }
