@@ -43,9 +43,7 @@ function validateDisk(disk) {
   }
 }
 
-export function mountStorage({ t, label, locale, defaultName, onChange }) {
-  const number = new Intl.NumberFormat(locale == "en-RTL" ? "en-AU" : locale);
-  const n = (value) => number.format(value);
+export function mountStorage({ t, label, n, defaultName, onChange }) {
   const size = $('#size');
   const name = $('#name');
   const sizes = new Map();
@@ -82,7 +80,7 @@ export function mountStorage({ t, label, locale, defaultName, onChange }) {
     onChange(valid());
   }
 
-  function select(id) {
+  function select(id, restoreSize = true) {
     target = disk.partitions.find((part) => part.id === id && part.allocation);
     $('.storage-chooser').hidden = !target;
     $('#no-locations').hidden = Boolean(target);
@@ -105,7 +103,7 @@ export function mountStorage({ t, label, locale, defaultName, onChange }) {
       for (const key of ['min', 'max', 'step']) {
         size[key] = limits[`${key}GB`];
       }
-      size.value = sizes.get(id) ?? limits.defaultGB;
+      if (restoreSize) size.value = sizes.get(id) ?? limits.defaultGB;
       const values = {
         min: n(limits.minGB),
         max: n(limits.maxGB),
@@ -172,7 +170,7 @@ export function mountStorage({ t, label, locale, defaultName, onChange }) {
       option.querySelector('span').append(title, detail);
       $('#destinations').append(option);
     }
-    select(candidates[0]?.id);
+    select(target?.id ?? candidates[0]?.id, !target);
   }
 
   async function load() {
@@ -234,6 +232,14 @@ export function mountStorage({ t, label, locale, defaultName, onChange }) {
   }
 
   return {
+    translate() {
+      if (disk) render();
+      if (!$('#storage-status').hidden) {
+        $('#storage-status').textContent = t(
+          loading ? 'storage.loading' : 'storage.loadError',
+        );
+      }
+    },
     load,
     valid,
     summary: () => ({

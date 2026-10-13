@@ -4,11 +4,15 @@ export function mountComplete({ t, readJSON, showMessage }) {
   const submit = $('[data-action="next"]');
   const error = $('#shutdown-error');
   let id;
+  let name;
   let request;
   let busy = false;
   let submitted = false;
 
   function render() {
+    if (!id) return;
+    $('#complete-selection').textContent = t('complete.select', { name });
+    if (!error.hidden) error.textContent = t('shutdown.failed');
     const selected = options.querySelector(':checked');
     options.disabled = Boolean(request);
     $('#metrics-hint').hidden = Boolean(selected);
@@ -23,6 +27,7 @@ export function mountComplete({ t, readJSON, showMessage }) {
   options.addEventListener('change', render);
 
   return {
+    render,
     async details() {
       const content = document.createElement('div');
       content.setAttribute('role', 'status');
@@ -44,9 +49,9 @@ export function mountComplete({ t, readJSON, showMessage }) {
         content.textContent = t('metrics.loadError');
       }
     },
-    show(jobId, name) {
+    show(jobId, volumeName) {
       id = jobId;
-      $('#complete-selection').textContent = t('complete.select', { name });
+      name = volumeName;
       render();
     },
     async shutdown() {

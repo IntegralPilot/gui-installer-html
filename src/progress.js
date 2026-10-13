@@ -1,15 +1,38 @@
-export function mountProgress({ t, locale, readJSON }) {
+export function mountProgress({ t, n, readJSON }) {
   const $ = (id) => document.getElementById(id);
   const bar = $('progress-bar');
   const error = $('progress-error');
   const retry = $('progress-retry');
-  const percent = new Intl.NumberFormat(locale == "en-RTL" ? "en-AU" : locale, {
-    style: 'percent',
-    maximumFractionDigits: 0,
-  });
   const stages = ['preparing', 'resizing', 'writing', 'finalising'];
   let id;
+  let latest;
   let polling = false;
+
+  function render() {
+    if (!id) return;
+    error.textContent = t('progress.connectionError');
+    const running = !latest || latest.status === 'running';
+    const stage = latest?.stage || 'preparing';
+    const message = t(`progress.${running ? stage : latest.status}`);
+    if ($('progress-label').textContent !== message) {
+      $('progress-label').textContent = message;
+    }
+    const percent = error.hidden ? latest?.percent : null;
+    if (percent == null) bar.removeAttribute('value');
+    else bar.value = percent;
+    $('progress-value').textContent =
+      percent == null
+        ? ''
+        : n(percent / 100, { style: 'percent', maximumFractionDigits: 0 });
+    $('progress-step').textContent = latest
+      ? t('progress.step', { step: n(latest.step), total: n(latest.total) })
+      : '';
+    $('resize-warning').hidden = !running || stage !== 'resizing';
+    $('progress-log').textContent = latest?.log || '';
+    if (!running) {
+      $('progress-title').textContent = t(`progress.${latest.status}Title`);
+    }
+  }
 
   async function poll() {
     if (polling) return;
@@ -42,22 +65,11 @@ export function mountProgress({ t, locale, readJSON }) {
         throw new Error('Invalid installation progress');
       }
 
-      const running = data.status === 'running';
-      const message = t(`progress.${running ? data.stage : data.status}`);
-      if ($('progress-label').textContent !== message) {
-        $('progress-label').textContent = message;
-      }
-      if (data.percent === null) bar.removeAttribute('value');
-      else bar.value = data.percent;
-      $('progress-value').textContent =
-        data.percent === null ? '' : percent.format(data.percent / 100);
-      $('progress-step').textContent = t('progress.step', data);
-      $('resize-warning').hidden = !running || data.stage !== 'resizing';
-      $('progress-log').textContent = data.log;
-      if (running) {
+      latest = data;
+      render();
+      if (data.status === 'running') {
         setTimeout(poll, 1000);
       } else {
-        $('progress-title').textContent = t(`progress.${data.status}Title`);
         if (data.status === 'failed') {
           $('progress-log').parentElement.open = true;
         }
@@ -70,11 +82,9 @@ export function mountProgress({ t, locale, readJSON }) {
       }
     } catch (cause) {
       console.error(cause);
-      bar.removeAttribute('value');
-      $('progress-value').textContent = '';
-      error.textContent = t('progress.connectionError');
       error.hidden = false;
       retry.hidden = false;
+      render();
     } finally {
       polling = false;
     }
@@ -83,10 +93,11 @@ export function mountProgress({ t, locale, readJSON }) {
   retry.addEventListener('click', poll);
 
   return {
+    render,
     async start(selection) {
       if (id) return;
       id = crypto.randomUUID();
-      $('progress-label').textContent = t('progress.preparing');
+      render();
       try {
         await readJSON('/api/install', {
           method: 'POST',

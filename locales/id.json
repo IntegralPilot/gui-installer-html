@@ -1,6 +1,5 @@
 {
   "app.title": "Instalasi {brand}",
-  "cancel": "Batal",
   "close": "Tutup",
   "close.label": "Tutup penginstal",
   "next": "Lanjut",
@@ -106,5 +105,7 @@
   "metrics.loading": "Memuat detail statistik…",
   "metrics.loadError": "Tidak dapat memuat detail statistik. Tutup jendela ini dan coba lagi.",
   "shutdown.failed": "Tidak dapat mengonfirmasi pematian Mac. Coba lagi.",
-  "demo.shutdown": "Pilihan statistik: {choice}.\nPratinjau ini tidak mematikan Mac atau mengirim statistik."
+  "demo.shutdown": "Pilihan statistik: {choice}.\nPratinjau ini tidak mematikan Mac atau mengirim statistik.",
+  "language": "Bahasa",
+  "language.loadError": "Tidak dapat memuat bahasa tersebut. Coba lagi."
 }

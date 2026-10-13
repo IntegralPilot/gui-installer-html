@@ -35,9 +35,13 @@ export async function createI18n(config, requested = navigator.languages) {
     ...translated,
     ...config.messages?.[locale],
   };
+  const formatLocale = config.locales[locale].formatLocale || locale;
   return {
     locale,
     dir: config.locales[locale].dir || 'ltr',
+    number(value, options) {
+      return new Intl.NumberFormat(formatLocale, options).format(value);
+    },
     t(key, values = {}) {
       if (typeof messages[key] !== 'string') {
         throw new Error(`Missing translation: ${key}`);

@@ -1,6 +1,5 @@
 {
   "app.title": "{brand} Setup",
-  "cancel": "Cancel",
   "close": "Close",
   "close.label": "Close installer",
   "next": "Next",
@@ -106,5 +105,7 @@
   "metrics.loading": "Loading statistics details…",
   "metrics.loadError": "Could not load statistics details. Close this window and try again.",
   "shutdown.failed": "Could not confirm shutdown. Try again.",
-  "demo.shutdown": "Statistics choice: {choice}.\nThis preview does not shut down your Mac or send statistics."
+  "demo.shutdown": "Statistics choice: {choice}.\nThis preview does not shut down your Mac or send statistics.",
+  "language": "Language",
+  "language.loadError": "Could not load that language. Try again."
 }

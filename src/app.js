@@ -10,7 +10,7 @@ const $ = (selector) => document.querySelector(selector);
 try {
   const params = new URLSearchParams(location.search);
   const config = await loadConfig(params.get('theme'));
-  const i18n = await createI18n(
+  let i18n = await createI18n(
     config,
     params.get('lang') || navigator.languages,
   );
@@ -23,7 +23,9 @@ try {
       total: 3,
       ...values,
     });
+  const n = (value, options) => i18n.number(value, options);
   const root = $('#installer');
+  const language = $('#language');
   const screens = [
     'welcome',
     'edition',
@@ -37,7 +39,7 @@ try {
   const storage = mountStorage({
     t,
     label,
-    locale: i18n.locale,
+    n,
     defaultName: config.brand.defaultName,
     onChange(valid) {
       if (root.dataset.screen === 'storage') {
@@ -46,7 +48,7 @@ try {
     },
   });
 
-  const progress = mountProgress({ t, locale: i18n.locale, readJSON });
+  const progress = mountProgress({ t, n, readJSON });
 
   const complete = mountComplete({ t, readJSON, showMessage });
   root.addEventListener('installer:complete', (event) => {
@@ -54,17 +56,8 @@ try {
     complete.show(event.detail.id, storage.selection().volumeName);
   });
 
-  document.documentElement.lang = i18n.locale;
-  document.documentElement.dir = i18n.dir;
-  document.title = t('app.title');
   $('link[rel="icon"]').href = config.brand.mark;
 
-  document.querySelectorAll('[data-i18n]').forEach((node) => {
-    node.textContent = t(node.dataset.i18n);
-  });
-  document.querySelectorAll('[data-label]').forEach((node) => {
-    node.setAttribute('aria-label', t(node.dataset.label));
-  });
   document.querySelectorAll('[data-asset]').forEach((node) => {
     node.src = config.brand[node.dataset.asset];
   });
@@ -79,6 +72,57 @@ try {
     option.querySelector('span').textContent = label(item);
     $('#editions').append(option);
   }
+
+  for (const [locale, info] of Object.entries(config.locales)) {
+    const option = new Option(info.selfName, locale);
+    option.hidden = Boolean(info.hidden);
+    option.disabled = Boolean(info.hidden);
+    option.lang = info.formatLocale || locale;
+    option.dir = info.dir || 'ltr';
+    language.add(option);
+  }
+
+  function translate() {
+    document.documentElement.lang = i18n.locale;
+    document.documentElement.dir = i18n.dir;
+    document.title = t('app.title');
+    language.value = i18n.locale;
+    document.querySelectorAll('[data-i18n]').forEach((node) => {
+      node.textContent = t(node.dataset.i18n);
+    });
+    document.querySelectorAll('[data-label]').forEach((node) => {
+      node.setAttribute('aria-label', t(node.dataset.label));
+    });
+    $('#editions')
+      .querySelectorAll('input')
+      .forEach((radio) => {
+        const item = config.editions.find((item) => item.id === radio.value);
+        radio.nextElementSibling.textContent = label(item);
+      });
+    renderEdition();
+    storage.translate();
+    progress.render();
+    renderScreen();
+  }
+
+  language.addEventListener('change', async () => {
+    if (language.disabled) return;
+    language.disabled = true;
+    try {
+      i18n = await createI18n(config, language.value);
+      translate();
+      const url = new URL(location.href);
+      url.searchParams.set('lang', i18n.locale);
+      history.replaceState(null, '', url);
+    } catch (error) {
+      console.error(error);
+      language.value = i18n.locale;
+      showMessage(t('language'), t('language.loadError'));
+    } finally {
+      language.disabled = false;
+      if (!$('#dialog').open) language.focus();
+    }
+  });
 
   function renderEdition() {
     $('#edition-name').textContent = label(edition);
@@ -101,11 +145,15 @@ try {
     }
     root.dataset.screen = name;
     root.setAttribute('aria-labelledby', `${name}-title`);
+    renderScreen();
+    $(`#${name}-title`).focus();
+    if (name === 'storage') storage.load();
+  }
+
+  function renderScreen() {
+    const name = root.dataset.screen;
     $('[data-action="back"]').hidden = ['welcome', 'complete'].includes(name);
     $('[data-action="next"]').hidden = false;
-    $('.window-footer [data-action="close"]').textContent = t(
-      name === 'complete' ? 'close' : 'cancel',
-    );
     const installing = name === 'progress';
     $('[data-action="back"]').disabled = installing;
     $('[data-action="next"]').disabled =
@@ -118,7 +166,10 @@ try {
     );
     const step = $(`#${name} .step`);
     if (step) {
-      step.textContent = t('wizard.step', { step: screens.indexOf(name) });
+      step.textContent = t('wizard.step', {
+        step: n(screens.indexOf(name)),
+        total: n(3),
+      });
     }
     if (name === 'review') {
       const values = {
@@ -132,10 +183,7 @@ try {
           node.textContent = values[node.dataset.value];
         });
     }
-    $(`#${name}-title`).focus();
-    if (name === 'storage') {
-      storage.load();
-    }
+    if (name === 'complete') complete.render();
   }
 
   function showMessage(title, body = '') {
@@ -203,7 +251,7 @@ try {
     }
   });
 
-  renderEdition();
+  translate();
   root.hidden = false;
 } catch (error) {
   console.error(error);

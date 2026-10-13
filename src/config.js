@@ -70,6 +70,9 @@ export async function loadConfig(override) {
     throw new Error('Default locale is not configured');
   }
   for (const value of Object.values(config.locales)) {
+    if (typeof value.selfName !== 'string' || !value.selfName.trim()) {
+      throw new Error('Missing language self-name');
+    }
     value.file = localURL(value.file);
     if (value.dir && !['ltr', 'rtl'].includes(value.dir)) {
       throw new Error('Invalid writing direction');

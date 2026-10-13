@@ -28,15 +28,20 @@
   "locales": {
     "en-AU": {
       "file": "locales/en-AU.json",
-      "dir": "ltr"
+      "dir": "ltr",
+      "selfName": "English (Australia)"
     },
     "en-RTL": {
       "file": "locales/en-AU.json",
-      "dir": "rtl"
+      "dir": "rtl",
+      "selfName": "English (RTL test)",
+      "formatLocale": "en-AU",
+      "hidden": true
     },
     "id": {
       "file": "locales/id.json",
-      "dir": "ltr"
+      "dir": "ltr",
+      "selfName": "Bahasa Indonesia"
     }
   },
   "version": "1.5.3",
