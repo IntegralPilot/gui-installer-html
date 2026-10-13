@@ -2,6 +2,8 @@ import { loadConfig } from './config.js';
 import { createI18n } from './i18n.js';
 import { mountStorage } from './storage.js';
 import { mountProgress } from './progress.js';
+import { mountComplete } from './complete.js';
+import { mockJSON as readJSON } from './mock-api.js';
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -22,7 +24,14 @@ try {
       ...values,
     });
   const root = $('#installer');
-  const screens = ['welcome', 'edition', 'storage', 'review', 'progress'];
+  const screens = [
+    'welcome',
+    'edition',
+    'storage',
+    'review',
+    'progress',
+    'complete',
+  ];
   let edition = config.editions[0];
   const label = (item) => (item.labelKey ? t(item.labelKey) : item.label);
   const storage = mountStorage({
@@ -37,7 +46,13 @@ try {
     },
   });
 
-  const progress = mountProgress({ t, locale: i18n.locale });
+  const progress = mountProgress({ t, locale: i18n.locale, readJSON });
+
+  const complete = mountComplete({ t, readJSON, showMessage });
+  root.addEventListener('installer:complete', (event) => {
+    showScreen('complete');
+    complete.show(event.detail.id, storage.selection().volumeName);
+  });
 
   document.documentElement.lang = i18n.locale;
   document.documentElement.dir = i18n.dir;
@@ -86,7 +101,11 @@ try {
     }
     root.dataset.screen = name;
     root.setAttribute('aria-labelledby', `${name}-title`);
-    $('[data-action="back"]').hidden = name === 'welcome';
+    $('[data-action="back"]').hidden = ['welcome', 'complete'].includes(name);
+    $('[data-action="next"]').hidden = false;
+    $('.window-footer [data-action="close"]').textContent = t(
+      name === 'complete' ? 'close' : 'cancel',
+    );
     const installing = name === 'progress';
     $('[data-action="back"]').disabled = installing;
     $('[data-action="next"]').disabled =
@@ -138,6 +157,10 @@ try {
 
     switch (button.dataset.action) {
       case 'next':
+        if (root.dataset.screen === 'complete') {
+          complete.shutdown();
+          break;
+        }
         if (
           ['storage', 'review'].includes(root.dataset.screen) &&
           !storage.valid()
@@ -164,6 +187,9 @@ try {
       }
       case 'device':
         showMessage(t('device.title'), t('demo.device'));
+        break;
+      case 'metrics':
+        complete.details();
         break;
       case 'about':
         showMessage(t('about.title'), t('about.body'));

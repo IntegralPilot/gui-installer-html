@@ -13,6 +13,10 @@ export async function mockJSON(path, options = {}) {
   const url = new URL(path, location.href);
   const method = options.method || 'GET';
 
+  if (url.pathname === '/api/telemetry.json' && method === 'GET') {
+    return readJSON(path, options);
+  }
+
   if (url.pathname === '/api/install' && method === 'POST') {
     const selection = JSON.parse(options.body);
     let job = jobs.get(selection.id);
@@ -57,6 +61,7 @@ export async function mockJSON(path, options = {}) {
       if (elapsed < boundary) break;
     }
     const complete = elapsed >= duration;
+    job.complete = complete;
     if (complete) log.push('Preview complete.');
     return {
       id,
@@ -67,6 +72,24 @@ export async function mockJSON(path, options = {}) {
       total: job.stages.length,
       log: log.join('\n'),
     };
+  }
+
+  if (url.pathname === '/api/shutdown' && method === 'POST') {
+    const { id, shareAnonymousStatistics } = JSON.parse(options.body);
+    const job = jobs.get(id);
+    if (!job?.complete || typeof shareAnonymousStatistics !== 'boolean') {
+      throw new Error(
+        'A completed installation and statistics choice are required',
+      );
+    }
+    if (
+      job.shutdown !== undefined &&
+      job.shutdown !== shareAnonymousStatistics
+    ) {
+      throw new Error('Statistics choice already submitted');
+    }
+    job.shutdown = shareAnonymousStatistics;
+    return { id, status: 'preview' };
   }
 
   throw new Error(`No preview response for ${method} ${url.pathname}`);

@@ -258,6 +258,65 @@
             </div>
           </section>
         </div>
+        <div id="complete" class="split-body" hidden>
+          <aside class="brand-panel"><img data-asset="logo" alt="" /></aside>
+          <section class="complete-main">
+            <h1
+              id="complete-title"
+              tabindex="-1"
+              data-i18n="complete.title"
+            ></h1>
+            <p class="intro" data-i18n="complete.intro"></p>
+            <ol class="finish-steps" role="list">
+              <li>
+                <strong data-i18n="complete.off"></strong>
+                <p data-i18n="complete.wait"></p>
+              </li>
+              <li>
+                <strong data-i18n="complete.hold"></strong>
+                <p data-i18n="complete.loading"></p>
+              </li>
+              <li>
+                <strong id="complete-selection"></strong>
+                <p data-i18n="complete.password"></p>
+              </li>
+            </ol>
+            <p class="photo-note" data-i18n="complete.photo"></p>
+            <section class="telemetry" aria-labelledby="metrics-label">
+              <div class="telemetry-heading">
+                <p id="metrics-label" data-i18n="metrics.question"></p>
+                <button
+                  class="text-button"
+                  data-action="metrics"
+                  data-i18n="metrics.details"
+                ></button>
+              </div>
+              <div class="telemetry-controls">
+                <fieldset
+                  id="metrics-options"
+                  class="metrics-options"
+                  aria-labelledby="metrics-label"
+                  aria-describedby="metrics-hint"
+                >
+                  <label>
+                    <input type="radio" name="metrics" value="yes" required />
+                    <span class="button" data-i18n="yes"></span>
+                  </label>
+                  <label>
+                    <input type="radio" name="metrics" value="no" required />
+                    <span class="button" data-i18n="no"></span>
+                  </label>
+                </fieldset>
+                <p
+                  id="metrics-hint"
+                  class="field-help"
+                  data-i18n="metrics.choose"
+                ></p>
+              </div>
+            </section>
+            <p id="shutdown-error" class="field-error" role="alert" hidden></p>
+          </section>
+        </div>
       </div>
       <footer class="window-footer">
         <button

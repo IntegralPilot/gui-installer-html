@@ -1,6 +1,4 @@
-import { mockJSON as readJSON } from './mock-api.js';
-
-export function mountProgress({ t, locale }) {
+export function mountProgress({ t, locale, readJSON }) {
   const $ = (id) => document.getElementById(id);
   const bar = $('progress-bar');
   const error = $('progress-error');
