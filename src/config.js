@@ -15,6 +15,7 @@ const colors = [
   'welcomeFooter',
   'field',
   'hover',
+  'unavailable',
 ];
 
 export function localURL(path) {

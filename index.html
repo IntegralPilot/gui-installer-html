@@ -88,6 +88,88 @@
             </figure>
           </div>
         </section>
+        <section id="storage" class="window-body" hidden>
+          <div class="page-heading">
+            <h1 id="storage-title" tabindex="-1" data-i18n="storage.title"></h1>
+            <span class="step" data-i18n="wizard.step"></span>
+          </div>
+          <p id="storage-status" class="intro" role="status" hidden></p>
+          <button
+            id="storage-retry"
+            class="button"
+            data-i18n="retry"
+            hidden
+          ></button>
+          <div id="storage-data" hidden>
+            <div class="drive-label">
+              <svg viewBox="0 0 24 22" aria-hidden="true">
+                <rect x="2" y="4" width="20" height="14" rx="2" />
+                <path d="M2 12h20m-5 3h2m-6 0h1" />
+              </svg>
+              <span id="drive-name"></span>
+            </div>
+            <div
+              id="disk-map"
+              class="disk-map"
+              role="group"
+              data-label="storage.map"
+            ></div>
+            <div class="storage-chooser choice-layout">
+              <fieldset
+                id="destinations"
+                class="option-list"
+                data-label="storage.locations"
+              ></fieldset>
+              <section
+                class="storage-settings"
+                aria-labelledby="operation-title"
+              >
+                <h2 id="operation-title"></h2>
+                <label for="size" data-i18n="storage.size"></label>
+                <div class="size-control">
+                  <input
+                    id="size"
+                    type="number"
+                    required
+                    aria-describedby="size-limits size-error"
+                  />
+                  <span data-i18n="unit.gb"></span>
+                </div>
+                <p class="field-help" id="size-limits"></p>
+                <p class="field-error" id="size-error" hidden></p>
+                <p id="storage-effect" class="storage-effect"></p>
+                <div class="storage-name">
+                  <label for="name" data-i18n="storage.name"></label>
+                  <input
+                    id="name"
+                    type="text"
+                    required
+                    maxlength="40"
+                    autocomplete="off"
+                    aria-describedby="name-help name-error"
+                  />
+                  <p
+                    class="field-help"
+                    id="name-help"
+                    data-i18n="storage.nameHelp"
+                  ></p>
+                  <p
+                    class="field-error"
+                    id="name-error"
+                    data-i18n="storage.nameError"
+                    hidden
+                  ></p>
+                </div>
+              </section>
+            </div>
+            <p
+              id="no-locations"
+              class="intro"
+              data-i18n="storage.none"
+              hidden
+            ></p>
+          </div>
+        </section>
       </div>
       <footer class="window-footer">
         <button
@@ -121,11 +203,18 @@
         <button class="button primary" data-i18n="close" autofocus></button>
       </form>
     </dialog>
-    <template id="edition-option">
+    <template id="option">
       <label class="option">
-        <input type="radio" name="edition" />
+        <input type="radio" />
         <span></span>
       </label>
+    </template>
+    <template id="partition">
+      <button class="disk-region">
+        <span class="region-name"></span>
+        <small class="region-size"></small>
+        <span class="tooltip" role="tooltip"></span>
+      </button>
     </template>
   </body>
 </html>

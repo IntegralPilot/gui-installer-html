@@ -1,5 +1,5 @@
-export async function readJSON(url) {
-  const response = await fetch(url);
+export async function readJSON(url, options) {
+  const response = await fetch(url, options);
   if (!response.ok) {
     throw new Error(`Cannot load ${url} (${response.status})`);
   }

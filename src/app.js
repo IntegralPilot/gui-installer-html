@@ -1,5 +1,6 @@
 import { loadConfig } from './config.js';
 import { createI18n } from './i18n.js';
+import { mountStorage } from './storage.js';
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -20,8 +21,20 @@ try {
       ...values,
     });
   const root = $('#installer');
+  const screens = ['welcome', 'edition', 'storage'];
   let edition = config.editions[0];
   const label = (item) => (item.labelKey ? t(item.labelKey) : item.label);
+  const storage = mountStorage({
+    t,
+    label,
+    locale: i18n.locale,
+    defaultName: config.brand.defaultName,
+    onChange(valid) {
+      if (root.dataset.screen === 'storage') {
+        $('[data-action="next"]').disabled = !valid;
+      }
+    },
+  });
 
   document.documentElement.lang = i18n.locale;
   document.documentElement.dir = i18n.dir;
@@ -40,8 +53,9 @@ try {
   $('[data-value="device"]').textContent = config.deviceName;
 
   for (const item of config.editions) {
-    const option = $('#edition-option').content.cloneNode(true);
+    const option = $('#option').content.cloneNode(true);
     const radio = option.querySelector('input');
+    radio.name = 'edition';
     radio.value = item.id;
     radio.checked = item === edition;
     option.querySelector('span').textContent = label(item);
@@ -64,12 +78,21 @@ try {
   }
 
   function showScreen(name) {
-    $('#welcome').hidden = name !== 'welcome';
-    $('#edition').hidden = name !== 'edition';
+    for (const screen of screens) {
+      $(`#${screen}`).hidden = screen !== name;
+    }
     root.dataset.screen = name;
     root.setAttribute('aria-labelledby', `${name}-title`);
     $('[data-action="back"]').hidden = name === 'welcome';
+    $('[data-action="next"]').disabled = name === 'storage' && !storage.valid();
+    const step = $(`#${name} .step`);
+    if (step) {
+      step.textContent = t('wizard.step', { step: screens.indexOf(name) });
+    }
     $(`#${name}-title`).focus();
+    if (name === 'storage') {
+      storage.load();
+    }
   }
 
   function showMessage(title, body = '') {
@@ -91,19 +114,19 @@ try {
 
     switch (button.dataset.action) {
       case 'next':
-        if (root.dataset.screen === 'welcome') {
-          showScreen('edition');
-        } else {
+        if (root.dataset.screen !== 'storage') {
+          showScreen(screens[screens.indexOf(root.dataset.screen) + 1]);
+        } else if (storage.valid()) {
           root.dispatchEvent(
             new CustomEvent('installer:next', {
               bubbles: true,
-              detail: { edition: edition.id },
+              detail: { edition: edition.id, ...storage.selection() },
             }),
           );
         }
         break;
       case 'back':
-        showScreen('welcome');
+        showScreen(screens[screens.indexOf(root.dataset.screen) - 1]);
         break;
       case 'preview': {
         const title = t('preview.title', { edition: label(edition) });

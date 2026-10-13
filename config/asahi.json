@@ -3,7 +3,8 @@
     "name": "Asahi Linux",
     "logo": "assets/asahi-logo-darkbg.svg",
     "mark": "assets/asahi-logomark.svg",
-    "distribution": "Fedora Asahi Remix"
+    "distribution": "Fedora Asahi Remix",
+    "defaultName": "Asahi"
   },
   "theme": {
     "accent": "#a33d58",
@@ -19,7 +20,8 @@
     "footer": "#f9f8fb",
     "welcomeFooter": "#eeedf2",
     "field": "#ffffff",
-    "hover": "#f5f2f6"
+    "hover": "#f5f2f6",
+    "unavailable": "#d9d8df"
   },
   "defaultLocale": "en-AU",
   "locales": {
