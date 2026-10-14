@@ -166,8 +166,10 @@ p {
 .window-close {
   min-height: 2.5rem;
   width: 3rem;
+  margin: 0.375rem;
   flex: none;
   border: 0;
+  border-radius: 0.375rem;
   background: none;
   color: var(--muted);
   font-size: 1.3125rem;
@@ -698,6 +700,10 @@ input[type='text'] {
 #size {
   width: 6.75rem;
   text-align: end;
+}
+
+#size::-webkit-inner-spin-button {
+  margin-inline-start: 0.5rem;
 }
 
 .field-help {
