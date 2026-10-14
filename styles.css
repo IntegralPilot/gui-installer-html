@@ -15,9 +15,7 @@
   --field: #ffffff;
   --hover: #f5f2f6;
   --unavailable: #d9d8df;
-  --font:
-    'Segoe UI Variable', 'Segoe UI', -apple-system, BlinkMacSystemFont, Arial,
-    sans-serif;
+  --font: system-ui, sans-serif;
 }
 
 @font-face {
