@@ -21,6 +21,13 @@
 }
 
 @font-face {
+  font-family: 'Atkinson Hyperlegible Next';
+  src: url('assets/fonts/AtkinsonHyperlegibleNext-Variable.woff2') format('woff2');
+  font-weight: 200 800;
+  font-display: swap;
+}
+
+@font-face {
   font-family: OpenDyslexic;
   src: url('assets/fonts/OpenDyslexic-Regular.woff2') format('woff2');
   font-weight: 400;
@@ -51,6 +58,10 @@
   --hover: #eeeeee !important;
   --unavailable: #dddddd !important;
   --progress-track: #ffffff !important;
+}
+
+[data-font='atkinson-hyperlegible-next'] body {
+  font-family: 'Atkinson Hyperlegible Next', var(--font);
 }
 
 [data-font='opendyslexic'] body {
