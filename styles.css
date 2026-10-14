@@ -1124,6 +1124,20 @@ dialog::backdrop {
   margin: 0;
 }
 
+.device-technical {
+  margin-top: 1.25rem;
+}
+
+.device-technical summary {
+  min-height: 1.5rem;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.device-technical[open] summary {
+  margin-bottom: 0.75rem;
+}
+
 dialog form {
   padding: 1rem 1.625rem;
   border-top: 1px solid var(--line);

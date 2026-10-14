@@ -251,17 +251,33 @@ try {
         break;
       }
       case 'device': {
+        const basicFields = ['productName', 'soc', 'osVersion', 'bootMode'];
+        const content = document.createDocumentFragment();
         const details = document.createElement('dl');
         details.className = 'device-details';
-        for (const [key, value] of Object.entries(info.device)) {
+        const technical = document.createElement('details');
+        technical.className = 'device-technical';
+        const summary = document.createElement('summary');
+        summary.textContent = t('device.technical');
+        const extra = details.cloneNode();
+        const extraFields = Object.keys(info.device).filter(
+          (key) => !basicFields.includes(key),
+        );
+        for (const key of [...basicFields, ...extraFields]) {
+          if (!Object.hasOwn(info.device, key)) continue;
           const term = document.createElement('dt');
           term.textContent = t(`device.${key}`);
           const description = document.createElement('dd');
           description.dir = 'auto';
-          description.textContent = value ?? t('device.none');
-          details.append(term, description);
+          description.textContent = info.device[key] ?? t('device.none');
+          (basicFields.includes(key) ? details : extra).append(term, description);
         }
-        showMessage(t('device.title'), details);
+        content.append(details);
+        if (extraFields.length) {
+          technical.append(summary, extra);
+          content.append(technical);
+        }
+        showMessage(t('device.title'), content);
         break;
       }
       case 'metrics':
