@@ -6,34 +6,24 @@ function validateDisk(disk) {
     ['label', 'labelKey'].some(
       (key) => typeof item[key] === 'string' && item[key].trim(),
     );
-  if (
-    !disk ||
-    typeof disk.id !== 'string' ||
-    !disk.id ||
-    !named(disk) ||
-    !positive(disk.sizeGB) ||
-    !Array.isArray(disk.partitions)
-  ) {
+  if (!disk || !positive(disk.sizeGB) || !Array.isArray(disk.partitions)) {
     throw new Error('Invalid disk data');
   }
   const ids = new Set();
   for (const part of disk.partitions) {
-    const limits = part.allocation;
     if (
+      !part ||
       typeof part.id !== 'string' ||
       !part.id ||
       !named(part) ||
       ids.has(part.id) ||
       !positive(part.sizeGB) ||
       !['free', 'apfs', 'other'].includes(part.kind) ||
-      (limits &&
-        (part.kind === 'other' ||
-          !['minGB', 'maxGB', 'stepGB', 'defaultGB'].every((key) =>
-            positive(limits[key]),
-          ) ||
-          limits.minGB > limits.defaultGB ||
-          limits.defaultGB > limits.maxGB ||
-          limits.maxGB > part.sizeGB))
+      (part.maxGB !== undefined &&
+        (part.kind !== 'apfs' ||
+          !Number.isFinite(part.maxGB) ||
+          part.maxGB < 0 ||
+          part.maxGB > part.sizeGB))
     ) {
       throw new Error('Invalid partition data');
     }
@@ -47,12 +37,19 @@ export function mountStorage({ t, label, n, readJSON, defaultName, onChange }) {
   const sizes = new Map();
   let disk;
   let target;
+  let edition;
+  let minGB;
   let loading = false;
+  let request = 0;
   name.value = defaultName;
 
   const validName = () =>
     Boolean(name.value.trim()) && name.value.length <= name.maxLength;
-  const valid = () => Boolean(target) && size.validity.valid && validName();
+  const valid = () =>
+    !loading && Boolean(target) && size.validity.valid && validName();
+  const maximum = (part) =>
+    Math.floor(part.kind === 'free' ? part.sizeGB : part.maxGB ?? 0);
+  const usable = (part) => part.kind !== 'other' && minGB <= maximum(part);
 
   function update() {
     if (target) {
@@ -78,8 +75,8 @@ export function mountStorage({ t, label, n, readJSON, defaultName, onChange }) {
     onChange(valid());
   }
 
-  function select(id, restoreSize = true) {
-    target = disk.partitions.find((part) => part.id === id && part.allocation);
+  function select(id) {
+    target = disk.partitions.find((part) => part.id === id && usable(part));
     $('.storage-chooser').hidden = !target;
     $('#no-locations').hidden = Boolean(target);
     if (target) {
@@ -97,15 +94,14 @@ export function mountStorage({ t, label, n, readJSON, defaultName, onChange }) {
         target.kind === 'free' ? 'storage.useFree' : 'storage.resize',
         { volume: label(target) },
       );
-      const limits = target.allocation;
-      for (const key of ['min', 'max', 'step']) {
-        size[key] = limits[`${key}GB`];
-      }
-      if (restoreSize) size.value = sizes.get(id) ?? limits.defaultGB;
+      const maxGB = maximum(target);
+      size.min = minGB;
+      size.max = maxGB;
+      size.value = sizes.get(id) ?? maxGB;
       const values = {
-        min: n(limits.minGB),
-        max: n(limits.maxGB),
-        step: n(limits.stepGB),
+        min: n(minGB),
+        max: n(maxGB),
+        step: n(1),
       };
       $('#size-limits').textContent = t('storage.limits', values);
       $('#size-error').textContent = t('storage.sizeError', values);
@@ -115,7 +111,7 @@ export function mountStorage({ t, label, n, readJSON, defaultName, onChange }) {
 
   function render() {
     $('#drive-name').textContent = t('storage.drive', {
-      disk: label(disk),
+      disk: t('storage.internal'),
       size: n(disk.sizeGB),
     });
     $('#disk-map').replaceChildren();
@@ -126,7 +122,7 @@ export function mountStorage({ t, label, n, readJSON, defaultName, onChange }) {
       node.value = part.id;
       node.style.flexGrow = part.sizeGB;
       node.classList.toggle('free', part.kind === 'free');
-      node.classList.toggle('unavailable', !part.allocation);
+      node.classList.toggle('unavailable', !usable(part));
       node.setAttribute(
         'aria-label',
         t('storage.region', { volume: label(part), size: n(part.sizeGB) }),
@@ -139,7 +135,7 @@ export function mountStorage({ t, label, n, readJSON, defaultName, onChange }) {
         text.hidden = part.sizeGB / disk.sizeGB < 0.06;
       }
       const tooltip = node.querySelector('.tooltip');
-      if (part.allocation) {
+      if (usable(part)) {
         node.setAttribute('aria-pressed', 'false');
         tooltip.remove();
       } else {
@@ -151,7 +147,7 @@ export function mountStorage({ t, label, n, readJSON, defaultName, onChange }) {
       $('#disk-map').append(node);
     });
     const candidates = disk.partitions
-      .filter((part) => part.allocation)
+      .filter(usable)
       .sort((a, b) => Number(b.kind === 'free') - Number(a.kind === 'free'));
     for (const part of candidates) {
       const option = $('#option').content.cloneNode(true);
@@ -163,33 +159,48 @@ export function mountStorage({ t, label, n, readJSON, defaultName, onChange }) {
       const detail = document.createElement('small');
       detail.textContent = t(
         part.kind === 'free' ? 'storage.available' : 'storage.reclaim',
-        { size: n(part.allocation.maxGB) },
+        { size: n(maximum(part)) },
       );
       option.querySelector('span').append(title, detail);
       $('#destinations').append(option);
     }
-    select(target?.id ?? candidates[0]?.id, !target);
+    select(
+      candidates.find((part) => part.id === target?.id)?.id ?? candidates[0]?.id,
+    );
   }
 
-  async function load() {
-    if (disk || loading) {
-      return;
+  async function load(selectedEdition = edition) {
+    const current = ++request;
+    if (selectedEdition !== edition) {
+      sizes.clear();
+      target = undefined;
     }
+    edition = selectedEdition;
     loading = true;
+    onChange(false);
     $('#storage').setAttribute('aria-busy', 'true');
+    $('#storage-data').hidden = true;
     $('#storage-status').hidden = false;
     $('#storage-status').textContent = t('storage.loading');
     $('#storage-retry').hidden = true;
     try {
-      const data = await readJSON('/api/partitions', {
-        cache: 'no-store',
-      });
+      const options = { cache: 'no-store', signal: AbortSignal.timeout(10000) };
+      const [data, required] = await Promise.all([
+        readJSON('/api/partitions', options),
+        readJSON(`/api/edition/${encodeURIComponent(edition)}/size`, options),
+      ]);
+      if (current !== request) return;
       validateDisk(data);
+      if (!Number.isFinite(required?.minGB) || required.minGB <= 0) {
+        throw new Error('Invalid edition size');
+      }
       disk = data;
+      minGB = Math.ceil(required.minGB);
       render();
       $('#storage-data').hidden = false;
       $('#storage-status').hidden = true;
     } catch (error) {
+      if (current !== request) return;
       console.error(error);
       disk = target = undefined;
       $('#storage-data').hidden = true;
@@ -197,12 +208,15 @@ export function mountStorage({ t, label, n, readJSON, defaultName, onChange }) {
       $('#storage-retry').hidden = false;
       onChange(false);
     } finally {
-      loading = false;
-      $('#storage').setAttribute('aria-busy', 'false');
+      if (current === request) {
+        loading = false;
+        $('#storage').setAttribute('aria-busy', 'false');
+        onChange(valid());
+      }
     }
   }
 
-  $('#storage-retry').addEventListener('click', load);
+  $('#storage-retry').addEventListener('click', () => load());
   $('#destinations').addEventListener('change', (event) =>
     select(event.target.value),
   );
@@ -274,7 +288,6 @@ export function mountStorage({ t, label, n, readJSON, defaultName, onChange }) {
             }),
     }),
     selection: () => ({
-      disk: disk.id,
       target: target.id,
       sizeGB: size.valueAsNumber,
       volumeName: name.value.trim(),

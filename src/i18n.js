@@ -3,7 +3,8 @@ export async function readJSON(url, options) {
   if (!response.ok) {
     throw new Error(`Cannot load ${url} (${response.status})`);
   }
-  return response.json();
+  const text = await response.text();
+  return text ? JSON.parse(text) : undefined;
 }
 
 function selectLocale(config, requested) {

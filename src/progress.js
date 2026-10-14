@@ -56,6 +56,7 @@ export function mountProgress({ t, n, readJSON }) {
           (!Number.isFinite(data.percent) ||
             data.percent < 0 ||
             data.percent > 100)) ||
+        (data.status === 'complete' && data.percent !== 100) ||
         !Number.isInteger(data.step) ||
         !Number.isInteger(data.total) ||
         data.step < 1 ||

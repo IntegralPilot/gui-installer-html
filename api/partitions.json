@@ -1,6 +1,4 @@
 {
-  "id": "disk0",
-  "labelKey": "storage.internal",
   "sizeGB": 500,
   "partitions": [
     {
@@ -14,22 +12,21 @@
       "label": "Macintosh HD",
       "sizeGB": 280,
       "kind": "apfs",
-      "allocation": { "minGB": 24, "maxGB": 140, "stepGB": 1, "defaultGB": 80 }
+      "maxGB": 140
     },
     {
       "id": "projects",
       "label": "Projects",
       "sizeGB": 100,
       "kind": "apfs",
-      "allocation": { "minGB": 24, "maxGB": 52, "stepGB": 1, "defaultGB": 32 }
+      "maxGB": 52
     },
     { "id": "files", "label": "Files", "sizeGB": 30, "kind": "other" },
     {
       "id": "free",
       "labelKey": "storage.free",
       "sizeGB": 80,
-      "kind": "free",
-      "allocation": { "minGB": 24, "maxGB": 80, "stepGB": 1, "defaultGB": 64 }
+      "kind": "free"
     },
     {
       "id": "recovery",

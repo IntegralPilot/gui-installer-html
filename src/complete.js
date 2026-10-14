@@ -1,4 +1,4 @@
-export function mountComplete({ t, readJSON, showMessage }) {
+export function mountComplete({ t, readJSON, showMessage, preview = false }) {
   const $ = (selector) => document.querySelector(selector);
   const options = $('#metrics-options');
   const submit = $('[data-action="next"]');
@@ -70,12 +70,12 @@ export function mountComplete({ t, readJSON, showMessage }) {
         });
         if (
           response.id !== id ||
-          !['preview', 'shutting-down'].includes(response.status)
+          response.status !== 'shutting-down'
         ) {
           throw new Error('Invalid shutdown response');
         }
         submitted = true;
-        if (response.status === 'preview') {
+        if (preview) {
           showMessage(
             t('shutdown'),
             t('demo.shutdown', {

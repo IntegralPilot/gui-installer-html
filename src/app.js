@@ -68,7 +68,7 @@ try {
 
   const progress = mountProgress({ t, n, readJSON });
 
-  const complete = mountComplete({ t, readJSON, showMessage });
+  const complete = mountComplete({ t, readJSON, showMessage, preview: true });
   root.addEventListener('installer:complete', (event) => {
     showScreen('complete');
     complete.show(event.detail.id, storage.selection().volumeName);
@@ -169,7 +169,7 @@ try {
     root.setAttribute('aria-labelledby', `${name}-title`);
     renderScreen();
     $(`#${name}-title`).focus();
-    if (name === 'storage') storage.load();
+    if (name === 'storage') storage.load(edition.id);
   }
 
   function renderScreen() {

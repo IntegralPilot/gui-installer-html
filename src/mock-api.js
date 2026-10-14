@@ -7,6 +7,46 @@ const stages = [
   { name: 'finalising', seconds: 4, log: 'Preparing the next step' },
 ];
 const jobs = new Map();
+let pending;
+
+function fail(status, message) {
+  throw Object.assign(new Error(message), { status });
+}
+
+function running(job) {
+  const seconds = job.stages.reduce((sum, stage) => sum + stage.seconds, 0);
+  return performance.now() < job.started + seconds * 1000;
+}
+
+async function createJob(selection, options) {
+  const readOptions = { cache: 'no-store', signal: options.signal };
+  const [disk, required] = await Promise.all([
+    mockJSON('/api/partitions', readOptions),
+    mockJSON(
+      `/api/edition/${encodeURIComponent(selection.edition)}/size`,
+      readOptions,
+    ),
+  ]);
+  const target = disk.partitions.find((part) => part.id === selection.target);
+  if (!target || !['free', 'apfs'].includes(target.kind)) {
+    fail(422, 'Invalid installation location');
+  }
+  const maxGB = target.kind === 'free' ? target.sizeGB : target.maxGB;
+  if (
+    !Number.isFinite(selection.sizeGB) ||
+    !Number.isFinite(maxGB) ||
+    selection.sizeGB < required.minGB ||
+    selection.sizeGB > maxGB
+  ) {
+    fail(422, 'Invalid installation size');
+  }
+  return {
+    started: performance.now(),
+    stages: stages.filter(
+      (stage) => stage.name !== 'resizing' || target.kind === 'apfs',
+    ),
+  };
+}
 
 export async function mockJSON(path, options = {}) {
   options.signal?.throwIfAborted();
@@ -15,7 +55,8 @@ export async function mockJSON(path, options = {}) {
 
   if (
     method === 'GET' &&
-    ['/api/info', '/api/partitions', '/api/telemetry'].includes(url.pathname)
+    (['/api/info', '/api/partitions', '/api/telemetry'].includes(url.pathname) ||
+      /^\/api\/edition\/[^/]+\/size$/.test(url.pathname))
   ) {
     url.pathname += '.json';
     return readJSON(url, options);
@@ -23,35 +64,30 @@ export async function mockJSON(path, options = {}) {
 
   if (url.pathname === '/api/install' && method === 'POST') {
     const selection = JSON.parse(options.body);
-    let job = jobs.get(selection.id);
-    if (job && job.request !== options.body) {
-      throw new Error('Installation ID already used');
-    }
-    if (!job) {
-      const disk = await mockJSON('/api/partitions', {
-        cache: 'no-store',
-        signal: options.signal,
-      });
-      const target = disk.partitions.find((p) => p.id === selection.target);
-      if (disk.id !== selection.disk || !target?.allocation) {
-        throw new Error('Invalid installation location');
+    if (jobs.has(selection.id)) return;
+    if (pending) {
+      if (pending.id !== selection.id) {
+        fail(409, 'Another installation is running');
       }
-      job = {
-        request: options.body,
-        started: performance.now(),
-        stages: stages.filter(
-          (stage) => stage.name !== 'resizing' || target.kind === 'apfs',
-        ),
-      };
-      jobs.set(selection.id, job);
+      await pending.promise;
+      return;
     }
-    return { id: selection.id };
+    if ([...jobs.values()].some(running)) {
+      fail(409, 'Another installation is running');
+    }
+    pending = { id: selection.id, promise: createJob(selection, options) };
+    try {
+      jobs.set(selection.id, await pending.promise);
+      return { id: selection.id };
+    } finally {
+      pending = undefined;
+    }
   }
 
   if (url.pathname === '/api/progress' && method === 'GET') {
     const id = url.searchParams.get('id');
     const job = jobs.get(id);
-    if (!job) throw new Error('Unknown installation');
+    if (!job) fail(404, 'Unknown installation');
 
     const elapsed = (performance.now() - job.started) / 1000;
     const duration = job.stages.reduce((sum, stage) => sum + stage.seconds, 0);
@@ -65,7 +101,6 @@ export async function mockJSON(path, options = {}) {
       if (elapsed < boundary) break;
     }
     const complete = elapsed >= duration;
-    job.complete = complete;
     if (complete) log.push('Preview complete.');
     return {
       id,
@@ -81,19 +116,19 @@ export async function mockJSON(path, options = {}) {
   if (url.pathname === '/api/shutdown' && method === 'POST') {
     const { id, shareAnonymousStatistics } = JSON.parse(options.body);
     const job = jobs.get(id);
-    if (!job?.complete || typeof shareAnonymousStatistics !== 'boolean') {
-      throw new Error(
-        'A completed installation and statistics choice are required',
-      );
+    if (!job) fail(404, 'Unknown installation');
+    if (running(job)) fail(409, 'Installation is still running');
+    if (typeof shareAnonymousStatistics !== 'boolean') {
+      fail(400, 'A statistics choice is required');
     }
     if (
       job.shutdown !== undefined &&
       job.shutdown !== shareAnonymousStatistics
     ) {
-      throw new Error('Statistics choice already submitted');
+      fail(409, 'Statistics choice already submitted');
     }
     job.shutdown = shareAnonymousStatistics;
-    return { id, status: 'preview' };
+    return { id, status: 'shutting-down' };
   }
 
   throw new Error(`No preview response for ${method} ${url.pathname}`);
