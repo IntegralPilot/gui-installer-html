@@ -6,24 +6,69 @@ export async function readJSON(url, options) {
   return response.json();
 }
 
-export async function createI18n(config, requested = navigator.languages) {
-  const supported = Object.keys(config.locales);
+function selectLocale(config, requested) {
+  const normalize = (tag) =>
+    tag.trim()
+      .toLowerCase()
+      .replaceAll('_', '-')
+      .replace(/\.[\w-]+$/, '')
+      .replace(/^zh-(cmn|yue)(?=-|$)/, '$1');
+  const supported = Object.entries(config.locales);
+  const candidates = supported
+    .filter(([, info]) => !info.hidden)
+    .map(([key, info]) => [
+      key,
+      new Intl.Locale(info.formatLocale || key).maximize(),
+    ]);
+  const aliases = new Map(
+    Object.entries(config.localeAliases || {}).map(([alias, target]) => [
+      normalize(alias),
+      target,
+    ]),
+  );
+  const locales = new Map(supported.map(([key]) => [normalize(key), key]));
+  const lookup = (tag) =>
+    locales.get(normalize(tag)) || aliases.get(normalize(tag));
   const preferences = Array.isArray(requested) ? requested : [requested];
-  let locale = config.defaultLocale;
 
   for (const preference of preferences) {
-    const tag = preference?.toLowerCase();
-    const match =
-      supported.find((key) => key.toLowerCase() === tag) ||
-      supported.find(
-        (key) => key.toLowerCase().split('-')[0] === tag?.split('-')[0],
-      );
+    if (typeof preference !== 'string' || !preference.trim()) continue;
+    let tag = normalize(preference);
+    const exact = lookup(tag);
+    if (exact) return exact;
 
-    if (match) {
-      locale = match;
-      break;
+    let parsed;
+    try {
+      parsed = new Intl.Locale(tag);
+    } catch {
+      // Legacy aliases can also have region or extension suffixes.
+      while (tag.includes('-')) {
+        tag = tag.slice(0, tag.lastIndexOf('-'));
+        if (aliases.has(tag)) return aliases.get(tag);
+      }
+      continue;
     }
+
+    const { language, script, baseName } = parsed.maximize();
+    const regional = candidates.find(([, locale]) => locale.baseName === baseName);
+    const match =
+      lookup(parsed.baseName) ||
+      lookup(baseName) ||
+      regional?.[0] ||
+      lookup(`${language}-${script}`) ||
+      aliases.get(language);
+    if (match) return match;
+
+    const sameScript = candidates.find(([, locale]) =>
+      locale.language === language && locale.script === script,
+    );
+    if (sameScript) return sameScript[0];
   }
+  return config.defaultLocale;
+}
+
+export async function createI18n(config, requested = navigator.languages) {
+  const locale = selectLocale(config, requested);
   const fallback = await readJSON(config.locales[config.defaultLocale].file);
   const translated =
     locale === config.defaultLocale

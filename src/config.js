@@ -73,6 +73,11 @@ export async function loadLocales() {
   if (!config.locales[config.defaultLocale]) {
     throw new Error('Default locale is not configured');
   }
+  for (const [alias, target] of Object.entries(config.localeAliases || {})) {
+    if (typeof target !== 'string' || !Object.hasOwn(config.locales, target)) {
+      throw new Error(`Invalid language alias: ${alias} → ${target}`);
+    }
+  }
   for (const value of Object.values(config.locales)) {
     if (typeof value.selfName !== 'string' || !value.selfName.trim()) {
       throw new Error('Missing language self-name');
