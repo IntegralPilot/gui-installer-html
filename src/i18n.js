@@ -29,12 +29,7 @@ export async function createI18n(config, requested = navigator.languages) {
     locale === config.defaultLocale
       ? {}
       : await readJSON(config.locales[locale].file);
-  const messages = {
-    ...fallback,
-    ...translated,
-    ...config.messages?.[config.defaultLocale],
-    ...config.messages?.[locale],
-  };
+  const messages = { ...fallback, ...translated };
   const formatLocale = config.locales[locale].formatLocale || locale;
   return {
     locale,

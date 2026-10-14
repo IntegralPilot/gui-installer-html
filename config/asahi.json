@@ -32,26 +32,6 @@
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
     }
   ],
-  "defaultLocale": "en-AU",
-  "locales": {
-    "en-AU": {
-      "file": "locales/en-AU.json",
-      "dir": "ltr",
-      "selfName": "English (Australia)"
-    },
-    "en-RTL": {
-      "file": "locales/en-AU.json",
-      "dir": "rtl",
-      "selfName": "English (RTL test)",
-      "formatLocale": "en-AU",
-      "hidden": true
-    },
-    "id": {
-      "file": "locales/id.json",
-      "dir": "ltr",
-      "selfName": "Bahasa Indonesia"
-    }
-  },
   "editions": [
     {
       "id": "kde",

@@ -1,4 +1,4 @@
-import { loadConfig } from './config.js';
+import { loadTheme, loadLocales } from './config.js';
 import { createI18n } from './i18n.js';
 import { mountStorage } from './storage.js';
 import { mountProgress } from './progress.js';
@@ -11,8 +11,9 @@ const $ = (selector) => document.querySelector(selector);
 
 try {
   const params = new URLSearchParams(location.search);
-  const [config, info] = await Promise.all([
-    loadConfig(params.get('theme')),
+  const [config, localeConfig, info] = await Promise.all([
+    loadTheme(params.get('theme')),
+    loadLocales(),
     readJSON('/api/info', {
       cache: 'no-store',
       signal: AbortSignal.timeout(10000),
@@ -24,7 +25,7 @@ try {
     );
   }
   let i18n = await createI18n(
-    config,
+    localeConfig,
     params.get('lang') || navigator.languages,
   );
   const t = (key, values = {}) =>
@@ -88,7 +89,7 @@ try {
     $('#editions').append(option);
   }
 
-  for (const [locale, info] of Object.entries(config.locales)) {
+  for (const [locale, info] of Object.entries(localeConfig.locales)) {
     if (info.hidden) continue;
     const option = new Option(info.selfName, locale);
     option.lang = info.formatLocale || locale;
@@ -98,11 +99,11 @@ try {
 
   function translate() {
     document.documentElement.lang =
-      config.locales[i18n.locale].formatLocale || i18n.locale;
+      localeConfig.locales[i18n.locale].formatLocale || i18n.locale;
     document.documentElement.dir = i18n.dir;
     document.title = t('app.title');
-    language.value = config.locales[i18n.locale].hidden
-      ? config.defaultLocale
+    language.value = localeConfig.locales[i18n.locale].hidden
+      ? localeConfig.defaultLocale
       : i18n.locale;
     document.querySelectorAll('[data-i18n]').forEach((node) => {
       node.textContent = t(node.dataset.i18n);
@@ -126,15 +127,15 @@ try {
     if (language.disabled) return;
     language.disabled = true;
     try {
-      i18n = await createI18n(config, language.value);
+      i18n = await createI18n(localeConfig, language.value);
       translate();
       const url = new URL(location.href);
       url.searchParams.set('lang', i18n.locale);
       history.replaceState(null, '', url);
     } catch (error) {
       console.error(error);
-      language.value = config.locales[i18n.locale].hidden
-        ? config.defaultLocale
+      language.value = localeConfig.locales[i18n.locale].hidden
+        ? localeConfig.defaultLocale
         : i18n.locale;
       showMessage(t('language'), t('language.loadError'));
     } finally {

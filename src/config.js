@@ -29,7 +29,7 @@ export function localURL(path) {
   return url.href;
 }
 
-export async function loadConfig(override) {
+export async function loadTheme(override) {
   const base = await readJSON('config/asahi.json');
   const custom = override ? await readJSON(localURL(override)) : {};
   const config = {
@@ -37,7 +37,6 @@ export async function loadConfig(override) {
     ...custom,
     brand: { ...base.brand, ...custom.brand },
     theme: { ...base.theme, ...custom.theme },
-    locales: { ...base.locales, ...custom.locales },
   };
   for (const key of colors) {
     if (!/^#[\da-f]{6}$/i.test(config.theme[key])) {
@@ -66,6 +65,11 @@ export async function loadConfig(override) {
       edition.image = localURL(edition.image);
     }
   }
+  return config;
+}
+
+export async function loadLocales() {
+  const config = await readJSON('config/locales.json');
   if (!config.locales[config.defaultLocale]) {
     throw new Error('Default locale is not configured');
   }
