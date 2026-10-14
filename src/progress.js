@@ -42,7 +42,7 @@ export function mountProgress({ t, n, readJSON }) {
 
     try {
       const data = await readJSON(
-        `/api/progress.json?id=${encodeURIComponent(id)}`,
+        `/api/progress?id=${encodeURIComponent(id)}`,
         {
           cache: 'no-store',
           signal: AbortSignal.timeout(10000),

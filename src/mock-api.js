@@ -15,9 +15,10 @@ export async function mockJSON(path, options = {}) {
 
   if (
     method === 'GET' &&
-    ['/api/info.json', '/api/telemetry.json'].includes(url.pathname)
+    ['/api/info', '/api/partitions', '/api/telemetry'].includes(url.pathname)
   ) {
-    return readJSON(path, options);
+    url.pathname += '.json';
+    return readJSON(url, options);
   }
 
   if (url.pathname === '/api/install' && method === 'POST') {
@@ -27,7 +28,7 @@ export async function mockJSON(path, options = {}) {
       throw new Error('Installation ID already used');
     }
     if (!job) {
-      const disk = await readJSON('/api/partitions.json', {
+      const disk = await mockJSON('/api/partitions', {
         cache: 'no-store',
         signal: options.signal,
       });
@@ -47,7 +48,7 @@ export async function mockJSON(path, options = {}) {
     return { id: selection.id };
   }
 
-  if (url.pathname === '/api/progress.json' && method === 'GET') {
+  if (url.pathname === '/api/progress' && method === 'GET') {
     const id = url.searchParams.get('id');
     const job = jobs.get(id);
     if (!job) throw new Error('Unknown installation');

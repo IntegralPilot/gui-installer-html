@@ -34,7 +34,7 @@ export function mountComplete({ t, readJSON, showMessage }) {
       content.textContent = t('metrics.loading');
       showMessage(t('metrics.title'), content);
       try {
-        const data = await readJSON('/api/telemetry.json', {
+        const data = await readJSON('/api/telemetry', {
           cache: 'no-store',
           signal: AbortSignal.timeout(10000),
         });

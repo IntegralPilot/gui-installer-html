@@ -12,14 +12,14 @@ try {
   const params = new URLSearchParams(location.search);
   const [config, info] = await Promise.all([
     loadConfig(params.get('theme')),
-    readJSON('/api/info.json', {
+    readJSON('/api/info', {
       cache: 'no-store',
       signal: AbortSignal.timeout(10000),
     }),
   ]);
   if (!info?.version || !info.device?.productName) {
     throw new Error(
-      'Missing installer version or product name in /api/info.json',
+      'Missing installer version or product name in /api/info',
     );
   }
   let i18n = await createI18n(
@@ -53,6 +53,7 @@ try {
     t,
     label,
     n,
+    readJSON,
     defaultName: config.brand.defaultName,
     onChange(valid) {
       if (root.dataset.screen === 'storage') {

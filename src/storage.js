@@ -1,5 +1,3 @@
-import { readJSON } from './i18n.js';
-
 const $ = (selector) => document.querySelector(selector);
 
 function validateDisk(disk) {
@@ -43,7 +41,7 @@ function validateDisk(disk) {
   }
 }
 
-export function mountStorage({ t, label, n, defaultName, onChange }) {
+export function mountStorage({ t, label, n, readJSON, defaultName, onChange }) {
   const size = $('#size');
   const name = $('#name');
   const sizes = new Map();
@@ -183,7 +181,7 @@ export function mountStorage({ t, label, n, defaultName, onChange }) {
     $('#storage-status').textContent = t('storage.loading');
     $('#storage-retry').hidden = true;
     try {
-      const data = await readJSON('/api/partitions.json', {
+      const data = await readJSON('/api/partitions', {
         cache: 'no-store',
       });
       validateDisk(data);
