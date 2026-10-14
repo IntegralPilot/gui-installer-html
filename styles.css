@@ -595,8 +595,21 @@ h1 {
 }
 
 .disk-region.unavailable {
-  background: var(--unavailable);
+  gap: 0;
+  background-color: var(--unavailable);
+  background-image: repeating-linear-gradient(
+    135deg,
+    var(--muted) 0 1px,
+    transparent 1px 0.5rem
+  );
+  color: var(--text);
   cursor: default;
+}
+
+.unavailable :is(.region-name, .region-size) {
+  width: 100%;
+  padding-inline: 0.125rem;
+  background: var(--unavailable);
 }
 
 .tooltip {
@@ -1319,6 +1332,18 @@ dialog h2:focus {
   .button,
   .language-select {
     border: 1px solid CanvasText;
+  }
+
+  .disk-region.unavailable {
+    --unavailable: Canvas;
+    --muted: CanvasText;
+    --accent: Highlight;
+    color: CanvasText;
+    forced-color-adjust: none;
+  }
+
+  .disk-region.unavailable .tooltip {
+    forced-color-adjust: auto;
   }
 
   .brand-panel {
