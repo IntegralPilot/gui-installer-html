@@ -5,6 +5,7 @@ import { mountProgress } from './progress.js';
 import { mountComplete } from './complete.js';
 import { mountAccessibility } from './accessibility.js';
 import { renderCredits } from './credits.js';
+import { renderAbout } from './about.js';
 import { mockJSON as readJSON } from './mock-api.js';
 
 const $ = (selector) => document.querySelector(selector);
@@ -31,6 +32,7 @@ try {
   const t = (key, values = {}) =>
     i18n.t(key, {
       brand: config.brand.name,
+      aboutBrand: config.about?.body ? config.brand.name : 'Asahi Linux',
       distribution: config.brand.distribution,
       version: info.version,
       step: 1,
@@ -287,7 +289,10 @@ try {
         complete.details();
         break;
       case 'about':
-        showMessage(t('about.title'), t('about.body'));
+        showMessage(
+          t('about.title'),
+          renderAbout(t, config.about, i18n.locale, localeConfig.defaultLocale),
+        );
         break;
       case 'credits':
         showMessage(t('credits'), renderCredits(t, config.credits));

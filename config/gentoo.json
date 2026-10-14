@@ -18,6 +18,13 @@
     "welcomeFooter": "#e9e4f1",
     "hover": "#f0edf6"
   },
+  "about": {
+    "body": {
+      "en-AU": "Gentoo is a Linux distribution you can shape to suit your needs. Its Portage package manager lets you choose your software and the features it includes, with guidance from the Gentoo community."
+    },
+    "projectWebsite": "https://www.gentoo.org/",
+    "gettingStarted": "https://www.gentoo.org/get-started/"
+  },
   "credits": [
     {
       "name": "Gentoo",

@@ -1157,9 +1157,21 @@ dialog::backdrop {
   margin-top: 1.5rem;
 }
 
-.credits a {
+.credits a,
+.about a {
   color: var(--accent-text);
   text-underline-offset: 0.15em;
+}
+
+.about p {
+  margin: 0;
+}
+
+.about-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  margin-top: 1rem;
 }
 
 .device-details {

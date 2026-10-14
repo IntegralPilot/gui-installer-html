@@ -1,3 +1,5 @@
+import { externalLink } from './link.js';
+
 const installerCredits = [
   {
     name: 'Asahi Linux GUI installer',
@@ -24,18 +26,7 @@ export function renderCredits(t, themeCredits = []) {
   content.className = 'credits';
 
   function link(text, href) {
-    if (!href) return document.createTextNode(text);
-    const url = new URL(href, document.baseURI);
-    if (!['http:', 'https:'].includes(url.protocol)) {
-      throw new Error(`Invalid credit link: ${href}`);
-    }
-    const anchor = document.createElement('a');
-    anchor.textContent = text;
-    anchor.href = url.href;
-    anchor.target = '_blank';
-    anchor.rel = 'noopener noreferrer';
-    anchor.setAttribute('aria-label', t('credits.openLink', { name: text }));
-    return anchor;
+    return href ? externalLink(t, text, href) : document.createTextNode(text);
   }
 
   for (const [title, entries] of [
