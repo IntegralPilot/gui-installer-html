@@ -4,6 +4,7 @@ import { mountStorage } from './storage.js';
 import { mountProgress } from './progress.js';
 import { mountComplete } from './complete.js';
 import { mountAccessibility } from './accessibility.js';
+import { renderCredits } from './credits.js';
 import { mockJSON as readJSON } from './mock-api.js';
 
 const $ = (selector) => document.querySelector(selector);
@@ -288,7 +289,7 @@ try {
         showMessage(t('about.title'), t('about.body'));
         break;
       case 'credits':
-        showMessage(t('credits'), t('credits.body'));
+        showMessage(t('credits'), renderCredits(t, config.credits));
         break;
       case 'close':
         showMessage(t('demo.title'));

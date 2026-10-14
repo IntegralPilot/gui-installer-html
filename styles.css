@@ -1119,6 +1119,38 @@ dialog::backdrop {
   overflow-wrap: anywhere;
 }
 
+.credits h3 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.credits dl {
+  margin: 0;
+}
+
+.credits dt {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.credits dd {
+  margin: 0 0 1rem;
+}
+
+.credits dd:last-child {
+  margin-bottom: 0;
+}
+
+.credits dl + h3 {
+  margin-top: 1.5rem;
+}
+
+.credits a {
+  color: var(--accent-text);
+  text-underline-offset: 0.15em;
+}
+
 .device-details {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
